@@ -5,16 +5,86 @@
 
 :root {
     --brand-red: #E11D48;
+    --brand-red-hover: #BE123C;
 }
 
-/* Custom Overrides for Existing Elements */
 .text-red { color: var(--brand-red); }
 
 /* Grid for Tools */
 .grid-tools {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(1, 1fr);
     gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .grid-tools { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .grid-tools { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Tool Card Improvement */
+.tool-card {
+    background: #ffffff;
+    border: 1px solid var(--slate-200);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 260px; /* Uniform height */
+    transition: var(--trans-fast);
+}
+
+.tool-card:hover {
+    border-color: var(--brand-red);
+    box-shadow: var(--shadow-premium);
+    transform: translateY(-2px);
+}
+
+.tool-card h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--slate-900);
+}
+
+.tool-desc {
+    font-size: 15px;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 45ch;
+}
+
+/* Unified Primary Button Alignment */
+.tool-card .btn-premium {
+    margin-top: auto; /* Push button to bottom */
+}
+
+/* Primary Button Style */
+.btn-primary {
+    background-color: var(--brand-red) !important;
+    color: #ffffff !important;
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: var(--trans-fast);
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--brand-red-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.3);
 }
 
 /* Tool Page Layouts */
@@ -25,37 +95,7 @@
     margin: 0 auto;
 }
 
-.tool-workspace {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
-}
-
-@media (max-width: 992px) {
-    .tool-workspace { grid-template-columns: 1fr; }
-}
-
-/* Character Counters & Helpers */
-.helper-text {
-    font-size: 0.75rem;
-    color: var(--slate-600);
-    margin-top: 0.25rem;
-    display: flex;
-    justify-content: space-between;
-}
-
-/* Empty States */
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    background: var(--slate-50);
-    border-radius: var(--radius-md);
-    border: 2px dashed var(--slate-200);
-    color: var(--slate-600);
-}
-
-/* Mobile Responsiveness for Header */
+/* Helper Components */
 .mobile-menu-btn {
     display: none;
     font-size: 1.5rem;
