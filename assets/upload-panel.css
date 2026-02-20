@@ -1,4 +1,4 @@
-/* Upload Assistant Panel Styles */
+/* Upload Assistant Panel Styles - Refactored */
 :root {
     --up-bg: #ffffff;
     --up-border: #e2e8f0;
@@ -28,9 +28,9 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     color: var(--up-text);
-    max-height: 85vh;
+    max-height: 90vh;
 }
 
 #upload-assistant-panel.hidden { display: none; }
@@ -46,18 +46,10 @@
     user-select: none;
 }
 .up-header:active { cursor: grabbing; }
+.up-header-title { font-weight: 800; font-size: 0.9rem; color: var(--up-accent); }
 
-.up-header-title { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
-.up-header-btns { display: flex; gap: 8px; }
-.up-icon-btn { 
-    background: none; border: none; cursor: pointer; color: var(--up-muted); 
-    padding: 4px; border-radius: 6px; display: flex; transition: all 0.2s;
-}
-.up-icon-btn:hover { background: var(--up-border); color: var(--up-accent); }
+.up-body { padding: 16px; overflow-y: auto; flex: 1; scrollbar-width: thin; }
 
-.up-body { padding: 16px; overflow-y: auto; flex: 1; }
-
-/* Score Gauge */
 .up-score-card {
     background: #f8fafc;
     border: 1px solid var(--up-border);
@@ -66,70 +58,61 @@
     margin-bottom: 16px;
 }
 .up-score-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.up-score-label { font-size: 0.85rem; font-weight: 600; color: var(--up-muted); }
-.up-score-value { font-size: 1.5rem; font-weight: 800; color: var(--up-accent); }
-.up-progress { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
-.up-progress-bar { height: 100%; background: var(--up-accent); width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.up-score-value { font-size: 1.5rem; font-weight: 900; color: var(--up-accent); }
+.up-progress { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+.up-progress-bar { height: 100%; width: 0%; transition: all 0.5s ease; background: var(--up-accent); }
 
-.up-hints { margin-top: 12px; padding: 0; list-style: none; font-size: 0.8rem; color: var(--up-muted); }
-.up-hints li { margin-bottom: 4px; display: flex; gap: 6px; align-items: flex-start; }
-.up-hints li::before { content: "⚡"; font-size: 0.7rem; }
+.up-hints { margin-top: 10px; padding: 0; list-style: none; font-size: 0.75rem; color: var(--up-muted); }
+.up-hints li { margin-bottom: 4px; display: flex; gap: 6px; line-height: 1.4; }
+.up-hints li::before { content: "💡"; }
 
-/* Fields */
-.up-field { margin-bottom: 16px; }
-.up-label-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; color: var(--up-muted); }
+.up-field { margin-bottom: 14px; }
+.up-label-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.75rem; font-weight: 700; color: var(--up-muted); }
 .up-input {
-    width: 100%; padding: 10px 12px; border: 1px solid var(--up-border); border-radius: 8px;
-    background: var(--up-bg); color: var(--up-text); font-size: 0.9rem; font-family: inherit; box-sizing: border-box;
+    width: 100%; padding: 10px; border: 1px solid var(--up-border); border-radius: 8px;
+    background: var(--up-bg); color: var(--up-text); font-size: 0.85rem; box-sizing: border-box;
 }
-.up-input:focus { outline: 2px solid var(--up-accent); border-color: transparent; }
-textarea.up-input { resize: vertical; min-height: 100px; line-height: 1.5; }
+textarea.up-input { min-height: 80px; resize: vertical; }
 
-/* Tag Chips */
 .up-tag-container {
-    border: 1px solid var(--up-border); border-radius: 8px; padding: 6px; display: flex; flex-wrap: wrap; gap: 6px; background: var(--up-bg);
+    border: 1px solid var(--up-border); border-radius: 8px; padding: 6px; display: flex; flex-wrap: wrap; gap: 5px; background: var(--up-bg);
 }
 .up-tag {
-    background: #f1f5f9; color: #334155; font-size: 0.75rem; padding: 2px 8px; border-radius: 6px;
+    background: var(--up-accent); color: white; font-size: 0.7rem; padding: 3px 8px; border-radius: 6px;
     display: flex; align-items: center; gap: 4px; font-weight: 600;
 }
-.up-tag-remove { cursor: pointer; color: #94a3b8; font-size: 1rem; line-height: 1; }
-.up-tag-remove:hover { color: var(--up-accent); }
-.up-tag-input { border: none; outline: none; background: transparent; flex: 1; min-width: 80px; font-size: 0.9rem; color: var(--up-text); padding: 4px; }
+.up-tag-remove { cursor: pointer; opacity: 0.7; }
+.up-tag-remove:hover { opacity: 1; }
 
-/* Accordion */
-.up-acc { border: 1px solid var(--up-border); border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
-.up-acc-trigger {
-    width: 100%; text-align: left; padding: 10px 16px; background: #f1f5f9; border: none;
-    font-size: 0.85rem; font-weight: 700; color: var(--up-text); cursor: pointer; display: flex; justify-content: space-between;
+.up-gen-tools {
+    background: #f1f5f9; border-radius: 10px; padding: 12px; margin-bottom: 16px;
 }
-.up-acc-content { display: none; padding: 12px; background: var(--up-bg); border-top: 1px solid var(--up-border); }
-.up-acc-content.active { display: block; }
+.up-gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.up-select { 
+    padding: 6px; border-radius: 6px; border: 1px solid var(--up-border); font-size: 0.75rem; 
+    background: white; color: var(--up-text);
+}
 
-.up-setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.8rem; }
-.up-setting-row input { width: 60px; padding: 4px; text-align: center; border: 1px solid var(--up-border); border-radius: 4px; background: var(--up-bg); color: var(--up-text); }
-
-/* Footer */
-.up-footer { padding: 12px 16px; border-top: 1px solid var(--up-border); background: #f8fafc; display: flex; gap: 8px; }
 .up-btn {
-    flex: 1; padding: 10px; border: 1px solid var(--up-border); background: white; color: var(--up-text);
-    border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
+    padding: 10px; border: 1px solid var(--up-border); background: white; color: var(--up-text);
+    border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
 }
-.up-btn:hover { background: #f1f5f9; border-color: var(--up-muted); }
+.up-btn:hover { background: #f8fafc; border-color: var(--up-muted); }
 .up-btn-primary { background: var(--up-accent); color: white; border: none; }
-.up-btn-primary:hover { background: var(--up-accent-hover); transform: translateY(-1px); }
+.up-btn-primary:hover { background: var(--up-accent-hover); }
 
-/* Toast */
+.up-footer { padding: 12px 16px; border-top: 1px solid var(--up-border); background: #f8fafc; display: flex; gap: 6px; }
+
 .up-toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    background: #1e293b; color: white; padding: 8px 20px; border-radius: 30px;
-    font-size: 0.85rem; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.3s, bottom 0.3s; z-index: 10002;
+    position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%);
+    background: #1e293b; color: white; padding: 10px 24px; border-radius: 30px;
+    font-size: 0.85rem; font-weight: 600; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10002;
 }
-.up-toast.show { opacity: 1; bottom: 40px; }
+.up-toast.show { bottom: 40px; }
 
-/* Open Button in Header (Global) */
 .up-open-btn {
-    background: var(--up-accent); color: white; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
-    cursor: pointer; border: none; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+    position: fixed; bottom: 20px; right: 20px; background: var(--up-accent); color: white;
+    width: 50px; height: 50px; border-radius: 25px; border: none; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4); z-index: 10000; font-size: 1.5rem;
 }
-.up-open-btn:hover { background: var(--up-accent-hover); }
