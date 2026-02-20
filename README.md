@@ -9,16 +9,19 @@ This feature allows users to generate backgrounds or overlays using AI (OpenAI D
 ### Deployment Instructions
 
 1. **Set OpenAI API Key:**
-   You need to set your OpenAI API key in Firebase Functions environment configuration.
+   You must set your OpenAI API key in Firebase Functions environment configuration for the backend to work:
    ```bash
    firebase functions:config:set openai.key="YOUR_OPENAI_API_KEY"
    ```
-   *Alternatively, if using Firebase Functions v2, use Secrets Manager.*
 
 2. **Deploy Functions and Hosting:**
+   The current GitHub Action may only deploy Hosting. To ensure the AI Generator works, deploy both using the Firebase CLI:
    ```bash
-   firebase deploy
+   firebase deploy --only functions,hosting
    ```
+
+3. **Verify API Endpoint:**
+   After deployment, ensure `https://your-app.web.app/api/generate-thumbnail-image` returns a JSON error (Method Not Allowed) instead of HTML.
 
 ### Safety & Policies
 

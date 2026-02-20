@@ -6,6 +6,10 @@
       {
         "source": "/api/generate-thumbnail-image",
         "function": "generateThumbnailImage"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   },
