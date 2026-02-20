@@ -134,7 +134,7 @@ function registerWebComponents() {
                         </ul>
                         <div class="nav-actions">
                             <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">🌙</button>
-                            <a href="/index.html#tools" class="btn-premium btn-primary btn-sm-fixed">Start Creating</a>
+                            <a href="/index.html#tools" class="btn-primary" style="height: 40px; padding: 0 1.25rem; font-size: 0.85rem; margin:0;">Start Creating</a>
                             <button class="mobile-menu-btn" aria-label="Menu">☰</button>
                         </div>
                     </nav>
@@ -142,24 +142,28 @@ function registerWebComponents() {
             </header>
             <style>
                 .header-main { 
-                    height: 72px; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); 
+                    height: 80px; background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); 
                     border-bottom: 1px solid var(--slate-200); position: sticky; top: 0; z-index: 1000;
+                    display: flex; align-items: center;
                 }
-                .header-container { height: 100%; }
-                .nav-main { height: 100%; display: flex; align-items: center; justify-content: space-between; }
-                .logo { font-size: 1.5rem; font-weight: 900; color: var(--slate-900); text-decoration: none; }
+                .header-container { width: 100%; }
+                .nav-main { display: flex; align-items: center; justify-content: space-between; }
+                .logo { font-size: 1.5rem; font-weight: 800; color: var(--slate-900); text-decoration: none; letter-spacing: -0.03em; }
                 .text-red { color: var(--brand-red); }
-                .nav-links { display: flex; list-style: none; gap: 2rem; }
+                .nav-links { display: flex; list-style: none; gap: 2.5rem; }
                 .nav-links a { text-decoration: none; color: var(--slate-600); font-weight: 600; font-size: 0.95rem; transition: var(--trans-fast); }
                 .nav-links a:hover, .nav-links a.active { color: var(--brand-red); }
-                .nav-actions { display: flex; align-items: center; gap: 1rem; }
-                .btn-sm-fixed { height: 40px; padding: 0 1rem; font-size: 0.875rem; }
-                .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+                .nav-actions { display: flex; align-items: center; gap: 1.25rem; }
+                .theme-toggle { background: var(--slate-100); border: none; width: 40px; height: 40px; border-radius: 10px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--trans-fast); }
+                .theme-toggle:hover { background: var(--slate-200); }
+                .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
                 @media (max-width: 768px) {
                     .nav-links { display: none; }
+                    .mobile-menu-btn { display: block; }
                     .nav-links.active { 
-                        display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; 
+                        display: flex; flex-direction: column; position: absolute; top: 80px; left: 0; width: 100%; 
                         background: white; padding: 2rem; border-bottom: 1px solid var(--slate-200); gap: 1.5rem;
+                        box-shadow: var(--shadow-lg);
                     }
                 }
             </style>
@@ -176,8 +180,8 @@ function registerWebComponents() {
                 <div class="container">
                     <div class="footer-grid">
                         <div class="footer-info">
-                            <a href="/index.html" class="logo" style="margin-bottom: 1rem; display: block;">CreatorToolkit<span class="text-red">.</span></a>
-                            <p style="max-width: 300px;">Professional AI-powered tools for content creators. Master the algorithm and grow your channel.</p>
+                            <a href="/index.html" class="logo" style="margin-bottom: 1.25rem; display: block;">CreatorToolkit<span class="text-red">.</span></a>
+                            <p style="max-width: 320px; color: var(--slate-600); font-size: 0.95rem;">Professional AI-powered tools for content creators. Master the algorithm and grow your channel with our 2026-ready toolset.</p>
                         </div>
                         <div class="footer-links">
                             <h4>Tools</h4>
@@ -199,20 +203,21 @@ function registerWebComponents() {
                         </div>
                     </div>
                     <div class="footer-bottom">
-                        <p>&copy; 2026 CreatorToolkit. All rights reserved.</p>
+                        <p>&copy; 2026 CreatorToolkit. Built for Creators.</p>
                     </div>
                 </div>
             </footer>
             <style>
-                .footer-main { padding: 5rem 0 2rem; background: var(--slate-50); border-top: 1px solid var(--slate-200); margin-top: 5rem; }
-                .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
-                .footer-links { display: flex; flex-direction: column; gap: 0.75rem; }
-                .footer-links h4 { font-size: 0.875rem; color: var(--slate-900); text-transform: uppercase; letter-spacing: 0.05em; }
-                .footer-links a { color: var(--slate-600); text-decoration: none; font-size: 0.9rem; transition: var(--trans-fast); }
-                .footer-links a:hover { color: var(--brand-red); }
-                .footer-bottom { padding-top: 2rem; border-top: 1px solid var(--slate-200); text-align: center; font-size: 0.875rem; }
+                .footer-main { padding: 6rem 0 3rem; background: var(--slate-50); border-top: 1px solid var(--slate-200); margin-top: 8rem; }
+                .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 5rem; }
+                .footer-links { display: flex; flex-direction: column; gap: 1rem; }
+                .footer-links h4 { font-size: 0.8rem; color: var(--slate-900); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; margin-bottom: 0.5rem; }
+                .footer-links a { color: var(--slate-600); text-decoration: none; font-size: 0.95rem; transition: var(--trans-fast); }
+                .footer-links a:hover { color: var(--brand-red); transform: translateX(4px); }
+                .footer-bottom { padding-top: 2.5rem; border-top: 1px solid var(--slate-200); text-align: center; font-size: 0.9rem; color: var(--slate-600); }
+                @media (max-width: 1024px) { .footer-grid { gap: 2rem; } }
                 @media (max-width: 768px) {
-                    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+                    .footer-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
                     .footer-info { grid-column: span 2; }
                 }
             </style>
