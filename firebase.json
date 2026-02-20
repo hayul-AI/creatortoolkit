@@ -1,15 +1,17 @@
 {
   "hosting": {
     "public": ".",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
     "rewrites": [
       {
         "source": "/api/generate-thumbnail-image",
         "function": "generateThumbnailImage"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
       }
     ]
   },
