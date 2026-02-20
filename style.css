@@ -6,64 +6,83 @@
 :root {
     --brand-red: #E11D48;
     --brand-red-hover: #BE123C;
+    --brand-red-soft: #FFF1F2;
 }
 
-.text-red { color: var(--brand-red); }
+/* Popular Tools Grid System */
+.popular-tools-section {
+    padding: 5rem 0;
+    background-color: var(--slate-50);
+}
 
-/* Grid for Tools */
-.grid-tools {
+.tools-grid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    margin-top: 3rem;
 }
 
-@media (min-width: 768px) {
-    .grid-tools { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (min-width: 1024px) {
-    .grid-tools { grid-template-columns: repeat(3, 1fr); }
-}
-
-/* Tool Card Improvement */
+/* Tool Card Styling */
 .tool-card {
+    display: flex;
+    flex-direction: column;
     background: #ffffff;
     border: 1px solid var(--slate-200);
     border-radius: 16px;
     padding: 24px;
-    display: flex;
-    flex-direction: column;
-    min-height: 260px; /* Uniform height */
-    transition: var(--trans-fast);
+    text-decoration: none;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 240px;
+    position: relative;
+    outline: none;
 }
 
 .tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     border-color: var(--brand-red);
-    box-shadow: var(--shadow-premium);
-    transform: translateY(-2px);
 }
 
-.tool-card h3 {
+.tool-card:focus-visible {
+    box-shadow: 0 0 0 3px var(--brand-red-soft), 0 0 0 6px var(--brand-red);
+}
+
+/* Card Internal Components */
+.tool-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--brand-red);
+    background: var(--brand-red-soft);
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    align-self: flex-start;
+}
+
+.tool-title {
     font-size: 1.25rem;
     font-weight: 800;
-    margin-bottom: 12px;
     color: var(--slate-900);
+    margin-bottom: 10px;
 }
 
 .tool-desc {
-    font-size: 15px;
-    color: #64748b;
+    font-size: 0.925rem;
+    color: var(--slate-600);
     line-height: 1.6;
     margin-bottom: 24px;
-    max-width: 45ch;
+    max-width: 100%;
 }
 
-/* Unified Primary Button Alignment */
-.tool-card .btn-premium {
-    margin-top: auto; /* Push button to bottom */
+/* Bottom Aligned Button */
+.tool-card .btn-primary {
+    margin-top: auto; /* Pushes button to the very bottom */
 }
 
-/* Primary Button Style */
+/* Reusable Primary Button */
 .btn-primary {
     background-color: var(--brand-red) !important;
     color: #ffffff !important;
@@ -71,7 +90,7 @@
     height: 44px;
     border-radius: 12px;
     font-weight: 700;
-    box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.2);
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,25 +102,25 @@
 
 .btn-primary:hover {
     background-color: var(--brand-red-hover) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.3);
 }
 
-/* Tool Page Layouts */
-.tool-page-header {
-    text-align: center;
-    padding: 4rem 0 3rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Helper Components */
-.mobile-menu-btn {
-    display: none;
-    font-size: 1.5rem;
-    cursor: pointer;
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
-    .mobile-menu-btn { display: block; }
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .popular-tools-section {
+        padding: 3rem 0;
+    }
 }
+
+/* Custom Overrides */
+.text-red { color: var(--brand-red); }
+.bg-soft { background-color: var(--slate-50); }
