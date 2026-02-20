@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://creatortoolkit.hotplmedia.com/sitemap.xml
+Sitemap: https://creatortoolkit.com/sitemap.xml
