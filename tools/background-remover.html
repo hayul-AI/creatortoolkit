@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Background Remover - CreatorToolkit</title>
+    <meta name="description" content="Remove backgrounds from images for free. Use our chroma key tool to make backgrounds transparent instantly in your browser.">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/index.html" class="logo">
+                    CreatorToolkit<span class="text-red">.</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="/index.html#tools">Tools</a></li>
+                    <li><a href="/index.html#guides">Guides</a></li>
+                    <li><a href="/about.html">About</a></li>
+                </ul>
+                <div class="flex items-center gap-4">
+                    <a href="/index.html#tools" class="btn btn-outline btn-sm">All Tools</a>
+                    <button class="mobile-menu-btn" aria-label="Menu">☰</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="section bg-surface">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <h1>Background Remover (Chroma Key)</h1>
+                <p>Remove specific colors to create transparent backgrounds. Ideal for green screens.</p>
+            </div>
+
+            <div class="card" style="max-width: 900px; margin: 0 auto;">
+                <div class="file-drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">✂️</div>
+                    <h3 style="margin-bottom: 0.5rem;">Drag & Drop Image</h3>
+                    <p style="margin-bottom: 0;">Works best with solid backgrounds (Green/Blue/White)</p>
+                    <input type="file" id="file-input" accept="image/*" class="file-input-hidden">
+                </div>
+
+                <div id="controls" style="display: none; margin-top: 2rem; border-top: 1px solid var(--ct-border); padding-top: 2rem;">
+                    <div class="grid grid-2 gap-8 items-start">
+                        <!-- Controls Side -->
+                        <div>
+                            <h3 style="font-size: 1.25rem;">Adjust Settings</h3>
+                            <p class="text-muted" style="font-size: 0.9rem;">1. Click on the image to pick the background color.<br>2. Adjust tolerance to refine.</p>
+                            
+                            <div class="form-group" style="background: var(--ct-surface); padding: 1.5rem; border-radius: var(--radius-md);">
+                                <label>Selected Color:</label>
+                                <div class="flex items-center gap-4">
+                                    <div id="color-preview" style="width: 48px; height: 48px; border: 2px solid var(--ct-border); border-radius: var(--radius-md); background: #eee;"></div>
+                                    <span class="text-muted" style="font-size: 0.9rem;">Click image to pick</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Color Tolerance: <span id="tol-val" class="text-red">30</span></label>
+                                <input type="range" id="tolerance" min="1" max="150" value="30">
+                            </div>
+
+                            <a id="download-btn" class="btn btn-primary" style="width: 100%;">Download Transparent PNG</a>
+                        </div>
+
+                        <!-- Canvas Side -->
+                        <div class="canvas-container" style="min-height: 300px; padding: 1rem; background: repeating-conic-gradient(#e2e8f0 0% 25%, #fff 0% 50%) 50% / 20px 20px;">
+                            <canvas id="canvas" style="max-width: 100%; height: auto; display: block; cursor: crosshair; box-shadow: var(--shadow-md);"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Block -->
+            <div class="container" style="max-width: 800px; margin-top: 4rem;">
+                <h2>How to use Chroma Key</h2>
+                <div class="grid grid-3" style="margin-top: 2rem;">
+                    <div class="card">
+                        <span class="badge" style="margin-bottom: 1rem;">Step 1</span>
+                        <h3>Upload</h3>
+                        <p style="font-size: 0.9rem;">Upload an image with a distinct background color.</p>
+                    </div>
+                    <div class="card">
+                        <span class="badge" style="margin-bottom: 1rem;">Step 2</span>
+                        <h3>Pick Color</h3>
+                        <p style="font-size: 0.9rem;">Click on the background area you want to remove.</p>
+                    </div>
+                    <div class="card">
+                        <span class="badge" style="margin-bottom: 1rem;">Step 3</span>
+                        <h3>Download</h3>
+                        <p style="font-size: 0.9rem;">Save as PNG to keep the transparency.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="/index.html" class="logo" style="margin-bottom: 1rem;">
+                        CreatorToolkit<span class="text-red">.</span>
+                    </a>
+                    <p>Empowering creators with free tools.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Creator Toolkit. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/main.js"></script>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const controls = document.getElementById('controls');
+        const toleranceInput = document.getElementById('tolerance');
+        const tolVal = document.getElementById('tol-val');
+        const colorPreview = document.getElementById('color-preview');
+        const downloadBtn = document.getElementById('download-btn');
+        const dropZone = document.getElementById('drop-zone');
+
+        let img = new Image();
+        let originalData = null; // Store original pixel data
+        let targetColor = { r: 0, g: 255, b: 0 }; // Default
+
+        // Drag & Drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            const url = URL.createObjectURL(file);
+            img = new Image();
+            img.onload = () => {
+                // Set canvas size
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                // Draw initial image
+                ctx.drawImage(img, 0, 0);
+                
+                // Save original data for reprocessing without reloading
+                originalData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                controls.style.display = 'block';
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        }
+
+        toleranceInput.addEventListener('input', (e) => {
+            tolVal.textContent = e.target.value;
+            processImage();
+        });
+
+        // Pick color
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = Math.floor((e.clientX - rect.left) * scaleX);
+            const y = Math.floor((e.clientY - rect.top) * scaleY);
+            
+            // Get pixel from original data, not current canvas (which might be transparent)
+            if(!originalData) return;
+            
+            // Index in ImageData array
+            const index = (y * canvas.width + x) * 4;
+            const r = originalData.data[index];
+            const g = originalData.data[index+1];
+            const b = originalData.data[index+2];
+            
+            targetColor = { r, g, b };
+            colorPreview.style.background = `rgb(${r}, ${g}, ${b})`;
+            processImage();
+        });
+
+        function processImage() {
+            if(!originalData) return;
+            
+            // Create a copy of original data to modify
+            const newData = new ImageData(
+                new Uint8ClampedArray(originalData.data),
+                originalData.width,
+                originalData.height
+            );
+            
+            const data = newData.data;
+            const tol = parseInt(toleranceInput.value);
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+
+                // Distance
+                const diff = Math.sqrt(
+                    Math.pow(r - targetColor.r, 2) +
+                    Math.pow(g - targetColor.g, 2) +
+                    Math.pow(b - targetColor.b, 2)
+                );
+
+                if (diff < tol) {
+                    data[i + 3] = 0; // Transparent
+                }
+            }
+            
+            ctx.putImageData(newData, 0, 0);
+            downloadBtn.href = canvas.toDataURL('image/png');
+            downloadBtn.download = 'removed-bg.png';
+        }
+
+        // Mobile menu
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            const nav = document.querySelector('.nav-links');
+            const isHidden = getComputedStyle(nav).display === 'none';
+            if(isHidden) {
+                nav.style.display = 'flex';
+                nav.style.flexDirection = 'column';
+                nav.style.position = 'absolute';
+                nav.style.top = '72px';
+                nav.style.left = '0';
+                nav.style.width = '100%';
+                nav.style.background = 'white';
+                nav.style.padding = '1.5rem';
+                nav.style.borderBottom = '1px solid var(--ct-border)';
+                nav.style.zIndex = '999';
+            } else {
+                nav.style.display = ''; 
+            }
+        });
+    </script>
+</body>
+</html>

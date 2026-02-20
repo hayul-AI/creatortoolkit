@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free YouTube Thumbnail Compressor - CreatorToolkit</title>
+    <meta name="description" content="Compress your YouTube thumbnails online for free. Reduce file size without losing quality. Fast, secure, and runs in your browser.">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/index.html" class="logo">
+                    CreatorToolkit<span class="text-red">.</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="/index.html#tools">Tools</a></li>
+                    <li><a href="/index.html#guides">Guides</a></li>
+                    <li><a href="/about.html">About</a></li>
+                </ul>
+                <div class="flex items-center gap-4">
+                    <a href="/index.html#tools" class="btn btn-outline btn-sm">All Tools</a>
+                    <button class="mobile-menu-btn" aria-label="Menu">☰</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="section bg-surface">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <h1>Thumbnail Compressor</h1>
+                <p>Reduce image file size without losing quality. Perfect for the YouTube 2MB limit.</p>
+            </div>
+
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div class="file-drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⬇️</div>
+                    <h3 style="margin-bottom: 0.5rem;">Drag & Drop your Thumbnail here</h3>
+                    <p style="margin-bottom: 0;">or click to browse (JPG, PNG)</p>
+                    <input type="file" id="file-input" accept="image/jpeg, image/png" class="file-input-hidden">
+                </div>
+
+                <div id="controls" style="display: none; margin-top: 2rem; border-top: 1px solid var(--ct-border); padding-top: 2rem;">
+                    <div class="grid grid-2 gap-8 items-center">
+                        <div class="form-group">
+                            <label for="quality">Compression Level: <span id="quality-val" class="text-red">80</span>%</label>
+                            <input type="range" id="quality" min="10" max="100" value="80">
+                        </div>
+                        
+                        <div class="text-center bg-surface" style="padding: 1.5rem; border-radius: var(--radius-md);">
+                            <div class="flex justify-between" style="margin-bottom: 0.5rem;">
+                                <span class="text-muted">Original Size:</span>
+                                <strong id="original-size">0 KB</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted">New Size:</span>
+                                <strong id="compressed-size" class="text-red">0 KB</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <a id="download-btn" class="btn btn-primary btn-lg" download="thumbnail-compressed.jpg">
+                            Download Compressed Image
+                        </a>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--ct-border);">
+                         <img id="preview-img" style="width: 100%; display: block;" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Block -->
+            <div class="container" style="max-width: 800px; margin-top: 4rem;">
+                <div class="grid grid-2">
+                    <div>
+                        <h2>Why Compress?</h2>
+                        <p>YouTube imposes a strict <strong>2MB limit</strong> on custom thumbnails. High-resolution images often exceed this.</p>
+                    </div>
+                    <div>
+                         <h3>How it works</h3>
+                         <ul class="features-list">
+                            <li><span class="check-icon">✓</span> Runs locally in browser</li>
+                            <li><span class="check-icon">✓</span> No quality loss visible</li>
+                            <li><span class="check-icon">✓</span> Instant download</li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="/index.html" class="logo" style="margin-bottom: 1rem;">
+                        CreatorToolkit<span class="text-red">.</span>
+                    </a>
+                    <p>Empowering creators with free tools.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Creator Toolkit. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/main.js"></script>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const qualityInput = document.getElementById('quality');
+        const qualityVal = document.getElementById('quality-val');
+        const controls = document.getElementById('controls');
+        const previewImg = document.getElementById('preview-img');
+        const originalSize = document.getElementById('original-size');
+        const compressedSize = document.getElementById('compressed-size');
+        const downloadBtn = document.getElementById('download-btn');
+        const dropZone = document.getElementById('drop-zone');
+
+        let currentFile = null;
+
+        // Drag and drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+             dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            currentFile = file;
+            originalSize.textContent = (currentFile.size / 1024).toFixed(2) + ' KB';
+            controls.style.display = 'block';
+            compressImage();
+        }
+
+        qualityInput.addEventListener('input', (e) => {
+            qualityVal.textContent = e.target.value;
+            compressImage();
+        });
+
+        function compressImage() {
+            if (!currentFile) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    const quality = parseInt(qualityInput.value) / 100;
+                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+                    previewImg.src = dataUrl;
+                    downloadBtn.href = dataUrl;
+
+                    // Calculate rough size (base64 length * 3/4)
+                    const head = 'data:image/jpeg;base64,';
+                    const size = Math.round((dataUrl.length - head.length) * 3 / 4);
+                    compressedSize.textContent = (size / 1024).toFixed(2) + ' KB';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(currentFile);
+        }
+        
+        // Mobile menu
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            const nav = document.querySelector('.nav-links');
+            const isHidden = getComputedStyle(nav).display === 'none';
+            if(isHidden) {
+                nav.style.display = 'flex';
+                nav.style.flexDirection = 'column';
+                nav.style.position = 'absolute';
+                nav.style.top = '72px';
+                nav.style.left = '0';
+                nav.style.width = '100%';
+                nav.style.background = 'white';
+                nav.style.padding = '1.5rem';
+                nav.style.borderBottom = '1px solid var(--ct-border)';
+                nav.style.zIndex = '999';
+            } else {
+                nav.style.display = ''; 
+            }
+        });
+    </script>
+</body>
+</html>

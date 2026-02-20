@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "prod": "creatortoolkit-64b1d",
+    "default": "creatortoolkit-64b1d"
+  },
+  "targets": {},
+  "etags": {}
+}

@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      ".github/**",
+      ".idx/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "rewrites": [
+      {
+        "source": "/api/generate-thumbnail-image",
+        "function": "generateThumbnailImage"
+      }
+    ]
+  },
+  "functions": {
+    "source": "functions"
+  }
+}
