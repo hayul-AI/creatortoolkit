@@ -4,7 +4,10 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "functions/**",
+      ".github/**",
+      ".idx/**"
     ],
     "cleanUrls": true,
     "trailingSlash": false,
@@ -12,6 +15,10 @@
       {
         "source": "/api/generate-thumbnail-image",
         "function": "generateThumbnailImage"
+      },
+      {
+        "source": "!**/*.{js,css,png,jpg,jpeg,gif,svg,ico,json,txt,xml}",
+        "destination": "/index.html"
       }
     ]
   },
