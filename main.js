@@ -95,6 +95,17 @@ function setupMobileMenu() {
  * WEB COMPONENTS
  */
 function registerWebComponents() {
+    // Import and register Upload Assistant
+    const script = document.createElement('script');
+    script.src = '/assets/js/upload-assistant.js';
+    script.onload = () => {
+        if (!document.querySelector('upload-assistant')) {
+            const assistant = document.createElement('upload-assistant');
+            document.body.appendChild(assistant);
+        }
+    };
+    document.head.appendChild(script);
+
     // Shared Header
     class CreatorHeader extends HTMLElement {
         connectedCallback() {
