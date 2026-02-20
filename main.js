@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
+    ensureBaseStyles();
     initTheme();
     setupGlobalDragAndDrop();
     setupMobileMenu();
     registerWebComponents();
 });
+
+function ensureBaseStyles() {
+    if (!document.querySelector('link[href*="base.css"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/assets/styles/base.css';
+        document.head.prepend(link);
+    }
+}
 
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
@@ -111,30 +121,50 @@ function registerWebComponents() {
         connectedCallback() {
             const activePath = window.location.pathname;
             this.innerHTML = `
-            <header>
-                <div class="container">
-                    <nav>
+            <header class="header-main">
+                <div class="container header-container">
+                    <nav class="nav-main">
                         <a href="/index.html" class="logo">
                             CreatorToolkit<span class="text-red">.</span>
                         </a>
                         <ul class="nav-links">
-                            <li><a href="/index.html#tools" class="${activePath.includes('tools') ? 'text-red' : ''}">Tools</a></li>
-                            <li><a href="/index.html#guides" class="${activePath.includes('guides') ? 'text-red' : ''}">Guides</a></li>
-                            <li><a href="/about.html" class="${activePath === '/about.html' ? 'text-red' : ''}">About</a></li>
-                            <li><a href="/contact.html" class="${activePath === '/contact.html' ? 'text-red' : ''}">Contact</a></li>
+                            <li><a href="/index.html#tools" class="${activePath.includes('tools') ? 'active' : ''}">Tools</a></li>
+                            <li><a href="/index.html#guides" class="${activePath.includes('guides') ? 'active' : ''}">Guides</a></li>
+                            <li><a href="/about.html" class="${activePath === '/about.html' ? 'active' : ''}">About</a></li>
                         </ul>
-                        <div class="flex items-center gap-4">
+                        <div class="nav-actions">
                             <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">🌙</button>
-                            <a href="/index.html#tools" class="btn btn-primary btn-sm">Start Creating</a>
+                            <a href="/index.html#tools" class="btn-premium btn-primary btn-sm-fixed">Start Creating</a>
                             <button class="mobile-menu-btn" aria-label="Menu">☰</button>
                         </div>
                     </nav>
                 </div>
             </header>
+            <style>
+                .header-main { 
+                    height: 72px; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); 
+                    border-bottom: 1px solid var(--slate-200); position: sticky; top: 0; z-index: 1000;
+                }
+                .header-container { height: 100%; }
+                .nav-main { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+                .logo { font-size: 1.5rem; font-weight: 900; color: var(--slate-900); text-decoration: none; }
+                .text-red { color: var(--brand-red); }
+                .nav-links { display: flex; list-style: none; gap: 2rem; }
+                .nav-links a { text-decoration: none; color: var(--slate-600); font-weight: 600; font-size: 0.95rem; transition: var(--trans-fast); }
+                .nav-links a:hover, .nav-links a.active { color: var(--brand-red); }
+                .nav-actions { display: flex; align-items: center; gap: 1rem; }
+                .btn-sm-fixed { height: 40px; padding: 0 1rem; font-size: 0.875rem; }
+                .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+                @media (max-width: 768px) {
+                    .nav-links { display: none; }
+                    .nav-links.active { 
+                        display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; 
+                        background: white; padding: 2rem; border-bottom: 1px solid var(--slate-200); gap: 1.5rem;
+                    }
+                }
+            </style>
             `;
-            // Re-setup mobile menu after rendering
             setupMobileMenu();
-            initTheme();
         }
     }
 
@@ -142,47 +172,50 @@ function registerWebComponents() {
     class CreatorFooter extends HTMLElement {
         connectedCallback() {
             this.innerHTML = `
-            <footer>
+            <footer class="footer-main">
                 <div class="container">
                     <div class="footer-grid">
-                        <div class="footer-col">
-                            <a href="/index.html" class="logo" style="margin-bottom: 1.5rem;">
-                                CreatorToolkit<span class="text-red">.</span>
-                            </a>
-                            <p class="text-muted">Empowering creators with free, high-quality tools for channel growth and SEO optimization.</p>
+                        <div class="footer-info">
+                            <a href="/index.html" class="logo" style="margin-bottom: 1rem; display: block;">CreatorToolkit<span class="text-red">.</span></a>
+                            <p style="max-width: 300px;">Professional AI-powered tools for content creators. Master the algorithm and grow your channel.</p>
                         </div>
-                        <div class="footer-col">
+                        <div class="footer-links">
                             <h4>Tools</h4>
-                            <ul>
-                                <li><a href="/tools/thumbnail-maker.html">Thumbnail Maker</a></li>
-                                <li><a href="/tools/title-generator.html">Title Generator</a></li>
-                                <li><a href="/tools/keyword-generator.html">Keyword Tool</a></li>
-                                <li><a href="/tools/image-converter.html">Image Converter</a></li>
-                            </ul>
+                            <a href="/tools/thumbnail-maker.html">Thumbnail Maker</a>
+                            <a href="/tools/title-generator.html">Title Generator</a>
+                            <a href="/tools/keyword-generator.html">Keyword Tool</a>
                         </div>
-                        <div class="footer-col">
+                        <div class="footer-links">
                             <h4>Resources</h4>
-                            <ul>
-                                <li><a href="/guides/youtube-seo-guide.html">SEO Guide</a></li>
-                                <li><a href="/guides/thumbnail-ctr-guide.html">CTR Guide</a></li>
-                                <li><a href="/guides/viral-titles-guide.html">Viral Titles</a></li>
-                            </ul>
+                            <a href="/guides/youtube-seo-guide.html">SEO Guide</a>
+                            <a href="/about.html">About Us</a>
+                            <a href="/contact.html">Contact</a>
                         </div>
-                        <div class="footer-col">
+                        <div class="footer-links">
                             <h4>Legal</h4>
-                            <ul>
-                                <li><a href="/about.html">About Us</a></li>
-                                <li><a href="/contact.html">Contact</a></li>
-                                <li><a href="/privacy-policy.html">Privacy Policy</a></li>
-                                <li><a href="/terms.html">Terms of Service</a></li>
-                            </ul>
+                            <a href="/privacy-policy.html">Privacy Policy</a>
+                            <a href="/terms.html">Terms of Service</a>
+                            <a href="/disclaimer.html">Disclaimer</a>
                         </div>
                     </div>
-                    <div class="text-center" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--ct-border);">
-                        <p class="text-muted" style="font-size: 0.875rem;">&copy; 2026 CreatorToolkit. All rights reserved.</p>
+                    <div class="footer-bottom">
+                        <p>&copy; 2026 CreatorToolkit. All rights reserved.</p>
                     </div>
                 </div>
             </footer>
+            <style>
+                .footer-main { padding: 5rem 0 2rem; background: var(--slate-50); border-top: 1px solid var(--slate-200); margin-top: 5rem; }
+                .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+                .footer-links { display: flex; flex-direction: column; gap: 0.75rem; }
+                .footer-links h4 { font-size: 0.875rem; color: var(--slate-900); text-transform: uppercase; letter-spacing: 0.05em; }
+                .footer-links a { color: var(--slate-600); text-decoration: none; font-size: 0.9rem; transition: var(--trans-fast); }
+                .footer-links a:hover { color: var(--brand-red); }
+                .footer-bottom { padding-top: 2rem; border-top: 1px solid var(--slate-200); text-align: center; font-size: 0.875rem; }
+                @media (max-width: 768px) {
+                    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+                    .footer-info { grid-column: span 2; }
+                }
+            </style>
             `;
         }
     }

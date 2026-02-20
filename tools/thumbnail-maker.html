@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thumbnail Editor - CreatorToolkit</title>
+    <link rel="stylesheet" href="/assets/styles/base.css">
     <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Montserrat:wght@900&family=Poppins:wght@900&family=Roboto:wght@900&family=Impact&family=Noto+Sans+KR:wght@900&display=swap" rel="stylesheet">
     <style>
-        .editor-layout { display: grid; grid-template-columns: 1fr 350px; gap: 20px; padding: 20px; max-width: 1600px; margin: 0 auto; }
-        .workspace { background: #1e293b; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; height: 750px; border: 2px solid var(--ct-border); }
-        .canvas-container { position: relative; width: 1280px; height: 720px; background: #000; zoom: 0.5; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        #bg-preview { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .tool-layout { display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: start; }
+        .workspace-premium { 
+            background: var(--slate-900); border-radius: var(--radius-lg); 
+            display: flex; align-items: center; justify-content: center; 
+            position: relative; overflow: hidden; height: 600px; border: 4px solid var(--slate-800);
+        }
+        .canvas-container { position: relative; width: 1280px; height: 720px; background: #000; zoom: 0.4; }
+        #bg-preview { width: 100%; height: 100%; object-fit: cover; }
         
-        .text-layer { position: absolute; cursor: move; user-select: none; white-space: nowrap; padding: 10px; border: 2px solid transparent; }
-        .text-layer.selected { border: 2px dashed #E11D48; background: rgba(225, 29, 72, 0.1); }
+        @media (max-width: 1024px) {
+            .tool-layout { grid-template-columns: 1fr; }
+            .workspace-premium { height: 400px; }
+            .canvas-container { zoom: 0.25; }
+        }
 
-        .sidebar { background: var(--ct-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--ct-border); height: fit-content; }
-        .prop-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--ct-border); }
-        .prop-label { font-size: 0.75rem; font-weight: 800; color: var(--ct-muted); display: block; margin-bottom: 10px; text-transform: uppercase; }
-        .control-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .full-input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--ct-border); background: var(--ct-bg); color: var(--ct-text); font-family: inherit; }
+        .sidebar-premium { position: sticky; top: 100px; }
+        .text-layer { position: absolute; cursor: move; user-select: none; white-space: nowrap; padding: 10px; border: 2px solid transparent; }
+        .text-layer.selected { border: 2px dashed var(--brand-red); background: rgba(225, 29, 72, 0.1); }
         
         #export-canvas { display: none; }
     </style>
@@ -27,72 +33,83 @@
 <body>
     <creator-header></creator-header>
 
-    <main class="editor-layout">
-        <div class="workspace">
-            <div class="canvas-container" id="canvas-view">
-                <img id="bg-preview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                <div id="layers-root"></div>
+    <main class="section bg-soft">
+        <div class="container">
+            <div style="margin-bottom: 3rem;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Thumbnail Editor</h1>
+                <p>Create professional, high-CTR thumbnails directly in your browser.</p>
+            </div>
+
+            <!-- Top Ad Slot -->
+            <div class="ad-slot ad-728x90 ad-responsive" style="margin-bottom: 2rem;"></div>
+
+            <div class="tool-layout">
+                <!-- Left: Workspace -->
+                <div class="workspace-premium">
+                    <div class="canvas-container" id="canvas-view">
+                        <img id="bg-preview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+                        <div id="layers-root"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Sidebar -->
+                <aside class="sidebar-premium">
+                    <div class="card-premium" style="padding: 1.5rem;">
+                        <div class="form-group">
+                            <label class="label-premium">Background Image</label>
+                            <input type="file" id="bg-upload" class="input-premium" accept="image/*">
+                        </div>
+
+                        <div id="edit-panel" style="display:none; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200);">
+                            <div class="form-group">
+                                <label class="label-premium">Text Content</label>
+                                <input type="text" id="input-text" class="input-premium">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-premium">Font Style</label>
+                                <select id="input-font" class="input-premium" style="margin-bottom: 0.75rem;">
+                                    <option value="Impact">Impact (Viral)</option>
+                                    <option value="Inter">Inter</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Noto Sans KR">Noto Sans KR</option>
+                                </select>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                    <input type="number" id="input-size" class="input-premium" value="120">
+                                    <input type="color" id="input-color" class="input-premium" style="height:44px; padding:2px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-premium">Outline (Stroke)</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                    <input type="color" id="input-stroke-color" class="input-premium" style="height:44px; padding:2px;">
+                                    <input type="number" id="input-stroke-width" class="input-premium" value="8">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                                <button class="btn-premium btn-outline" style="flex: 1; height: 40px;" onclick="deleteLayer()">Delete</button>
+                                <button class="btn-premium btn-outline" style="flex: 1; height: 40px;" onclick="changeZ(1)">Forward</button>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem;">
+                            <button class="btn-premium btn-outline" onclick="addTextLayer()">+ Add Text Layer</button>
+                            <button class="btn-premium btn-primary" onclick="exportPNG()">Export Thumbnail</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar Ad Slot -->
+                    <div class="ad-slot ad-300x250" style="margin-top: 2rem;"></div>
+                </aside>
             </div>
         </div>
-
-        <aside class="sidebar">
-            <div class="prop-section">
-                <span class="prop-label">1. Background</span>
-                <input type="file" id="bg-upload" class="full-input" accept="image/*">
-            </div>
-
-            <div id="edit-panel" style="display:none;">
-                <div class="prop-section">
-                    <span class="prop-label">2. Text Content</span>
-                    <input type="text" id="input-text" class="full-input">
-                </div>
-
-                <div class="prop-section">
-                    <span class="prop-label">3. Typography</span>
-                    <select id="input-font" class="full-input" style="margin-bottom:10px;">
-                        <option value="Impact">Impact (Viral)</option>
-                        <option value="Inter">Inter</option>
-                        <option value="Montserrat">Montserrat</option>
-                        <option value="Poppins">Poppins</option>
-                        <option value="Roboto">Roboto</option>
-                        <option value="Noto Sans KR">Noto Sans KR</option>
-                    </select>
-                    <div class="control-row">
-                        <input type="number" id="input-size" class="full-input" value="80">
-                        <input type="color" id="input-color" class="full-input" style="height:38px; padding:2px;">
-                    </div>
-                    <div class="control-row">
-                        <button class="btn btn-outline btn-sm" onclick="toggleProp('bold')">B</button>
-                        <button class="btn btn-outline btn-sm" onclick="toggleProp('italic')">I</button>
-                    </div>
-                </div>
-
-                <div class="prop-section">
-                    <span class="prop-label">4. Outline & Shadow</span>
-                    <div class="control-row">
-                        <input type="color" id="input-stroke-color" class="full-input" style="height:38px; padding:2px;">
-                        <input type="number" id="input-stroke-width" class="full-input" value="5">
-                    </div>
-                </div>
-
-                <div class="prop-section">
-                    <div class="control-row">
-                        <button class="btn btn-outline btn-sm" onclick="changeZ(1)">Forward</button>
-                        <button class="btn btn-outline btn-sm" onclick="changeZ(-1)">Backward</button>
-                    </div>
-                    <button class="btn btn-outline btn-sm" style="width:100%; color:var(--up-accent); border-color:var(--up-accent);" onclick="deleteLayer()">Delete Layer</button>
-                </div>
-            </div>
-
-            <div class="btn-stack" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
-                <button class="btn btn-outline" onclick="addTextLayer()">+ Add Text</button>
-                <button class="btn btn-primary" onclick="exportPNG()">Export 1280x720 PNG</button>
-                <button class="btn btn-outline btn-sm" onclick="saveProject()">Save Project</button>
-            </div>
-        </aside>
     </main>
 
     <canvas id="export-canvas" width="1280" height="720"></canvas>
+    
     <creator-footer></creator-footer>
 
     <script src="/main.js"></script>
@@ -102,7 +119,6 @@
         const root = document.getElementById('layers-root');
         const bgImg = document.getElementById('bg-preview');
 
-        // 1. Image Upload
         document.getElementById('bg-upload').onchange = (e) => {
             const file = e.target.files[0];
             if(file) {
@@ -112,7 +128,6 @@
             }
         };
 
-        // 2. Layer Logic
         function addTextLayer() {
             const id = Date.now();
             layers.push({
@@ -156,11 +171,10 @@
             render();
         }
 
-        // 3. Drag Logic
         function startDrag(e, l) {
             const startX = e.clientX; const startY = e.clientY;
             const initX = l.x; const initY = l.y;
-            const zoom = 0.5; // Matches the CSS zoom
+            const zoom = 0.4; 
 
             function move(ev) {
                 l.x = initX + (ev.clientX - startX) / zoom;
@@ -172,7 +186,6 @@
             window.addEventListener('mouseup', stop);
         }
 
-        // 4. Sync Inputs
         ['input-text','input-font','input-size','input-color','input-stroke-color','input-stroke-width'].forEach(id => {
             document.getElementById(id).oninput = () => {
                 const l = layers.find(x => x.id === selectedId);
@@ -187,11 +200,9 @@
             };
         });
 
-        function toggleProp(p) { const l = layers.find(x => x.id === selectedId); if(l) { l[p] = !l[p]; render(); } }
         function changeZ(v) { const l = layers.find(x => x.id === selectedId); if(l) { l.zIndex += v; render(); } }
         function deleteLayer() { layers = layers.filter(x => x.id !== selectedId); selectedId = null; render(); selectLayer(null); }
 
-        // 5. Export
         function exportPNG() {
             const canvas = document.getElementById('export-canvas');
             const ctx = canvas.getContext('2d');
@@ -202,22 +213,18 @@
                 if(l.strokeWidth > 0) {
                     ctx.strokeStyle = l.strokeColor;
                     ctx.lineWidth = l.strokeWidth * 2;
-                    ctx.strokeText(l.text, l.x + 10, l.y + 10);
+                    ctx.strokeText(l.text, l.x, l.y);
                 }
                 ctx.fillStyle = l.color;
-                ctx.fillText(l.text, l.x + 10, l.y + 10);
+                ctx.fillText(l.text, l.x, l.y);
             });
             const link = document.createElement('a');
             link.download = 'thumbnail.png';
             link.href = canvas.toDataURL();
             link.click();
         }
-
-        function saveProject() { localStorage.setItem('thumb_v1', JSON.stringify({bg: bgImg.src, layers})); alert('Project Saved!'); }
-        window.onload = () => {
-            const saved = JSON.parse(localStorage.getItem('thumb_v1'));
-            if(saved) { bgImg.src = saved.bg; layers = saved.layers; render(); }
-        };
     </script>
+    <link rel="stylesheet" href="/assets/upload-panel.css">
+    <script defer src="/assets/upload-panel.js"></script>
 </body>
 </html>
