@@ -439,3 +439,29 @@ main input[type="range"]{
     min-height: 140px;
   }
 }
+
+/* Contact Page Specific Styles */
+.label-premium {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.card-premium input, 
+.card-premium textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card-premium input:focus, 
+.card-premium textarea:focus {
+    outline: none;
+    border-color: var(--brand-red);
+    box-shadow: 0 0 0 3px var(--brand-red-soft);
+}

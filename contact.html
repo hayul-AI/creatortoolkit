@@ -4,114 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - CreatorToolkit</title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <meta name="description" content="Get in touch with the CreatorToolkit team for feedback or support.">
+    <link rel="stylesheet" href="/style.css?v=20260221">
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="/index.html" class="logo">
-                    CreatorToolkit<span class="text-red">.</span>
-                </a>
-                <ul class="nav-links">
-                    <li><a href="index.html#tools">Tools</a></li>
-                    <li><a href="index.html#guides">Guides</a></li>
-                    <li><a href="/about.html">About</a></li>
-                    <li><a href="/contact.html">Contact</a></li>
-                </ul>
-                <div class="flex items-center gap-4">
-                    <a href="index.html#tools" class="btn btn-outline btn-sm">All Tools</a>
-                    <button class="mobile-menu-btn" aria-label="Menu">☰</button>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <creator-header></creator-header>
 
-    <main class="section bg-surface">
+    <main style="padding: 5rem 0; background: var(--bg-secondary); min-height: 80vh;">
         <div class="container" style="max-width: 600px;">
-            <div class="text-center" style="margin-bottom: 3rem;">
-                <h1>Contact Us</h1>
-                <p>Have questions, suggestions, or found a bug? We'd love to hear from you.</p>
-            </div>
+            <div class="card-premium" style="background: var(--bg-primary); padding: 3rem; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-md);">
+                <h1 style="font-size: 2.5rem; letter-spacing: -0.02em; margin-bottom: 1rem; text-align: center;">Contact Us</h1>
+                <p style="color: var(--text-secondary); text-align: center; margin-bottom: 2.5rem; line-height: 1.6;">
+                    Have questions, feedback, or need help with CreatorToolkit? We'd love to hear from you!
+                </p>
 
-            <div class="card">
-                <form action="#" method="POST">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" name="name" placeholder="Your Name" required>
+                <form id="contact-form">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="label-premium" style="display: block; margin-bottom: 0.5rem; font-weight: 700;">Your Name</label>
+                        <input type="text" id="contact-name" placeholder="Enter your name" required>
                     </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email" placeholder="you@example.com" required>
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="label-premium" style="display: block; margin-bottom: 0.5rem; font-weight: 700;">Email Address</label>
+                        <input type="email" id="contact-email" placeholder="your@email.com" required>
                     </div>
-                    <div class="form-group">
-                        <label>Message</label>
-                        <textarea name="message" rows="5" placeholder="How can we help?" required></textarea>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label class="label-premium" style="display: block; margin-bottom: 0.5rem; font-weight: 700;">Message</label>
+                        <textarea id="contact-message" placeholder="How can we help you?" style="min-height: 150px;" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; height: 52px; font-size: 1.1rem; margin: 0;">Send Message</button>
                 </form>
-            </div>
 
-            <div style="margin-top: 3rem; text-align: center;">
-                <h3>Prefer Email?</h3>
-                <p class="text-muted">You can reach us directly at:</p>
-                <a href="mailto:support@creatortoolkit.com" class="text-red" style="font-weight: 600;">support@creatortoolkit.com</a>
+                <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center;">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">You can also reach us directly at:</p>
+                    <div style="display: inline-flex; align-items: center; gap: 10px; background: var(--bg-secondary); padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <strong id="support-email">hotplmedia@gmail.com</strong>
+                        <button onclick="copySupportEmail()" class="btn-quick-fix" style="margin: 0; padding: 4px 8px; font-size: 0.75rem;">Copy</button>
+                    </div>
+                    <div id="copy-feedback" style="font-size: 0.75rem; color: var(--brand-red); font-weight: 700; margin-top: 8px; opacity: 0; transition: opacity 0.3s;">Copied!</div>
+                    <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">
+                        Typical response time: 1–3 business days.
+                    </p>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <a href="/index.html" class="logo" style="margin-bottom: 1rem;">
-                        CreatorToolkit<span class="text-red">.</span>
-                    </a>
-                    <p>Empowering creators with free tools.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2026 Creator Toolkit. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <creator-footer></creator-footer>
 
     <script src="/main.js"></script>
     <script>
-        // Mobile menu
-        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
-            const nav = document.querySelector('.nav-links');
-            const isHidden = getComputedStyle(nav).display === 'none';
-            if(isHidden) {
-                nav.style.display = 'flex';
-                nav.style.flexDirection = 'column';
-                nav.style.position = 'absolute';
-                nav.style.top = '72px';
-                nav.style.left = '0';
-                nav.style.width = '100%';
-                nav.style.background = 'white';
-                nav.style.padding = '1.5rem';
-                nav.style.borderBottom = '1px solid var(--ct-border)';
-                nav.style.zIndex = '999';
-            } else {
-                nav.style.display = ''; 
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+
+            if (!message) {
+                document.getElementById('contact-message').focus();
+                return;
             }
+
+            const subject = encodeURIComponent("Contact from " + name);
+            const body = encodeURIComponent("Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + message);
+            window.location.href = "mailto:hotplmedia@gmail.com?subject=" + subject + "&body=" + body;
         });
+
+        function copySupportEmail() {
+            const email = document.getElementById('support-email').innerText;
+            navigator.clipboard.writeText(email).then(() => {
+                const feedback = document.getElementById('copy-feedback');
+                feedback.style.opacity = '1';
+                setTimeout(() => { feedback.style.opacity = '0'; }, 2000);
+            });
+        }
     </script>
-<link rel="stylesheet" href="/assets/upload-panel.css">
-    <script defer src="/assets/upload-panel.js"></script>
 </body>
 </html>

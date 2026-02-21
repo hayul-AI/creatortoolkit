@@ -100,6 +100,7 @@ function registerWebComponents() {
                             <li><a href="/about.html" class="${activePath === '/about.html' ? 'active' : ''}">About</a></li>
                             <li><a href="/privacy.html" class="${activePath === '/privacy.html' ? 'active' : ''}">Privacy</a></li>
                             <li><a href="/terms.html" class="${activePath === '/terms.html' ? 'active' : ''}">Terms</a></li>
+                            <li><a href="/contact.html" class="${activePath === '/contact.html' ? 'active' : ''}">Contact</a></li>
                         </ul>
                     </nav>
 
