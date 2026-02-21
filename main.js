@@ -49,43 +49,68 @@ function registerWebComponents() {
             const text = currentTheme === 'dark' ? 'Light' : 'Dark';
 
             this.innerHTML = `
-            <header class="header-main">
-                <div class="container header-container">
-                    <nav class="nav-main">
+            <header class="site-header">
+                <div class="nav-inner">
+                    <div class="nav-left">
                         <a href="/index.html" class="logo">CreatorToolkit<span class="text-red">.</span></a>
-                        
-                        <ul class="nav-links">
-                            <li><a href="/index.html#tools" class="${activePath.includes('tools') ? 'active' : ''}">Tools</a></li>
+                    </div>
+                    
+                    <nav class="nav-center">
+                        <ul class="nav-links-list">
+                            <li><a href="/index.html#tools" class="${activePath.includes('tools') && !activePath.includes('video-analyzer') ? 'active' : ''}">Tools</a></li>
                             <li><a href="/tools/video-analyzer.html" class="${activePath.includes('video-analyzer') ? 'active' : ''}">Analyzer</a></li>
                             <li><a href="/index.html#guides" class="${activePath.includes('guides') ? 'active' : ''}">Guides</a></li>
                             <li><a href="/about.html" class="${activePath === '/about.html' ? 'active' : ''}">About</a></li>
                         </ul>
-
-                        <div class="nav-actions">
-                            <button class="theme-toggle" onclick="toggleTheme()">
-                                <span class="theme-icon">${icon}</span><span class="theme-label">${text}</span>
-                            </button>
-                            <a href="/index.html#tools" class="btn-primary start-btn">Start Creating</a>
-                            <button class="mobile-menu-btn">☰</button>
-                        </div>
                     </nav>
+
+                    <div class="nav-right">
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <span class="theme-icon">${icon}</span><span class="theme-label">${text}</span>
+                        </button>
+                        <a href="/index.html#tools" class="btn-primary start-btn">Start Creating</a>
+                        <button class="mobile-menu-btn">☰</button>
+                    </div>
                 </div>
             </header>
             <style>
-                .header-main { 
+                .site-header { 
                     height: 72px; background: var(--bg-primary); border-bottom: 1px solid var(--border-color); 
                     position: sticky; top: 0; z-index: 1000; display: flex; align-items: center;
                 }
-                .header-container { width: 100%; }
-                .nav-main { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-                .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-primary); flex-shrink: 0; }
+                .nav-inner {
+                    display: grid;
+                    grid-template-columns: 1fr auto 1fr; /* 3구역 완벽 대칭 */
+                    align-items: center;
+                    height: 72px;
+                    width: 100%;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 20px;
+                }
+                
+                .nav-left { justify-self: start; }
+                .nav-center { justify-self: center; }
+                .nav-right { 
+                    justify-self: end; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 12px; 
+                }
+
+                .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-primary); text-decoration: none; }
                 .text-red { color: var(--brand-red); }
                 
-                .nav-links { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
-                .nav-links a { color: var(--text-secondary); font-weight: 600; font-size: 0.95rem; transition: 0.2s; }
-                .nav-links a:hover, .nav-links a.active { color: var(--brand-red); }
-                
-                .nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+                .nav-links-list { display: flex; align-items: center; gap: 28px; list-style: none; padding: 0; margin: 0; }
+                .nav-links-list a { 
+                    font-weight: 600; 
+                    font-size: 15.5px; 
+                    color: var(--text-primary); 
+                    text-decoration: none; 
+                    transition: color .15s ease; 
+                }
+                .nav-links-list a:hover, .nav-links-list a.active { color: var(--brand-red); }
+                .nav-links-list a.active { font-weight: 700; }
                 
                 .theme-toggle { 
                     display: inline-flex; align-items: center; gap: 8px;
@@ -93,30 +118,23 @@ function registerWebComponents() {
                     height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer; 
                     transition: all 0.2s; color: var(--text-primary); font-weight: 600; font-size: 13px;
                 }
-                .theme-toggle:hover { background: var(--border-color); box-shadow: var(--shadow-sm); }
-                .theme-icon { font-size: 16px; line-height: 1; }
+                .theme-toggle:hover { background: var(--border-color); }
+                .theme-icon { font-size: 16px; }
 
-                .start-btn { height: 40px; font-size: 13px; }
+                .start-btn { height: 40px; font-size: 13px; padding: 0 16px; border-radius: 12px; }
 
                 .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-primary); cursor: pointer; }
 
-                @media (max-width: 1024px) {
-                    .nav-links { gap: 1.25rem; }
-                }
-
-                @media (max-width: 768px) {
-                    .nav-links { display: none; }
-                    .mobile-menu-btn { display: block; order: 3; }
-                    .nav-links.active { 
-                        display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; 
-                        background: var(--bg-primary); padding: 2rem; border-bottom: 1px solid var(--border-color); gap: 1.5rem;
-                    }
+                @media (max-width: 900px) {
+                    .nav-center { display: none; }
+                    .mobile-menu-btn { display: block; }
+                    .nav-inner { grid-template-columns: auto 1fr; }
+                    .nav-right { gap: 8px; }
                 }
 
                 @media (max-width: 480px) {
-                    .theme-label { display: none; }
+                    .theme-label, .start-btn { display: none; }
                     .theme-toggle { padding: 0 10px; width: 40px; justify-content: center; }
-                    .start-btn { display: none; }
                 }
             </style>
             `;
