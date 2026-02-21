@@ -155,10 +155,15 @@ a { text-decoration: none; color: inherit; }
 .intent-info { background: #e0f2fe; color: #075985; }
 .intent-comparison { background: #fef3c7; color: #92400e; }
 
+.bottom-nav {
+  margin-top: 3rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
 /* Dark mode adjustment for bottom nav */
 html.dark .bottom-nav {
-  background: rgba(15, 23, 42, 0.92);
-  border-top-color: #334155;
+  border-top-color: var(--border-color);
 }
 
 .bottom-nav__inner {
@@ -213,7 +218,7 @@ html.dark .bottom-nav {
 
 /* Content padding to avoid overlap */
 body {
-  padding-bottom: 86px;
+  padding-bottom: 0;
 }
 
 /* Hide on home page */

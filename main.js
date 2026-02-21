@@ -45,16 +45,21 @@ function setupMobileMenu() {
 function injectBottomNav() {
     if (document.querySelector('.bottom-nav')) return;
     
+    const main = document.querySelector('main');
+    if (!main) return;
+
     const nav = document.createElement('div');
     nav.className = 'bottom-nav';
     nav.setAttribute('role', 'navigation');
     nav.innerHTML = `
-        <div class="bottom-nav__inner">
-            <button class="bottom-nav__btn bottom-nav__btn--ghost" id="btnBack" type="button">← Back</button>
-            <a class="bottom-nav__btn bottom-nav__btn--primary" id="btnHome" href="/">Home</a>
+        <div class="container">
+            <div class="bottom-nav__inner">
+                <button class="bottom-nav__btn bottom-nav__btn--ghost" id="btnBack" type="button">← Back</button>
+                <a class="bottom-nav__btn bottom-nav__btn--primary" id="btnHome" href="/">Home</a>
+            </div>
         </div>
     `;
-    document.body.appendChild(nav);
+    main.appendChild(nav);
 
     // Logic for Back button
     const backBtn = document.getElementById('btnBack');
