@@ -90,8 +90,7 @@ function registerWebComponents() {
                     
                     <nav class="nav-center">
                         <ul class="nav-links-list">
-                            <li><a href="/index.html#tools" class="${activePath.includes('tools') && !activePath.includes('video-analyzer') && !activePath.includes('earnings') ? 'active' : ''}">Tools</a></li>
-                            <li><a href="/tools/video-analyzer.html" class="${activePath.includes('video-analyzer') ? 'active' : ''}">Analyzer</a></li>
+                            <li><a href="/index.html#tools" class="${activePath.includes('tools') && !activePath.includes('earnings') ? 'active' : ''}">Tools</a></li>
                             <li><a href="/tools/earnings-calculator.html" class="${activePath.includes('earnings') ? 'active' : ''}">Earnings</a></li>
                             <li><a href="/tools/thumbnail-copy-generator.html" class="${activePath.includes('thumbnail-copy') ? 'active' : ''}">Copy Gen</a></li>
                             <li><a href="/tools/description-generator.html" class="${activePath.includes('description-generator') ? 'active' : ''}">Desc Gen</a></li>
