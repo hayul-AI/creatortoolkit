@@ -3,174 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free YouTube Title Generator - CreatorToolkit</title>
-    <meta name="description" content="Generate viral YouTube video titles instantly. Use our free tool to get click-worthy title ideas based on top-performing templates.">
+    <title>CTR YouTube Title Generator - CreatorToolkit</title>
+    <meta name="description" content="Generate high-CTR, SEO-optimized YouTube titles instantly using our local psychological trigger engine.">
     <link rel="stylesheet" href="/style.css?v=20260221">
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .generator-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 400px 1fr; gap: 2.5rem; align-items: start; }
+        .input-card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .results-container { display: flex; flex-direction: column; gap: 1rem; }
+        .title-card { 
+            background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem;
+            display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; transition: 0.2s;
+        }
+        .title-card:hover { border-color: var(--brand-red); transform: translateX(4px); }
+        .title-info { flex: 1; }
+        .title-text { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.4; }
+        .seo-badge { font-size: 0.75rem; font-weight: 800; color: var(--brand-red); background: var(--brand-red-soft); padding: 2px 10px; border-radius: 100px; display: inline-block; }
+        
+        .radio-set { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+        .radio-set label { 
+            display: flex; align-items: center; justify-content: center; height: 40px; 
+            border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .radio-set input { display: none; }
+        .radio-set input:checked + label { background: var(--brand-red); border-color: var(--brand-red); color: white; }
+
+        @media (max-width: 968px) { .generator-container { grid-template-columns: 1fr; } }
+    </style>
 </head>
-<body>
+<body class="bg-secondary">
     <creator-header></creator-header>
 
     <main style="padding: 5rem 0;">
         <div class="container">
             <div style="text-align: center; margin-bottom: 4rem;">
-                <h1 style="font-size: 3rem; letter-spacing: -0.02em; margin-bottom: 1rem;">Viral Title Generator</h1>
-                <p style="color: var(--text-secondary); font-size: 1.1rem;">Generate high-CTR video titles based on proven psychological triggers.</p>
+                <h1 style="font-size: 3rem; letter-spacing: -0.02em; margin-bottom: 1rem;">CTR Title Generator</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">Generate high-performing YouTube titles with psychological SEO triggers.</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; max-width: 1100px; margin: 0 auto; align-items: start;">
-                <!-- Input Card -->
-                <div class="tool-card" style="min-height: auto; cursor: default; padding:2rem; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-lg);">
-                    <h3 style="margin-bottom: 2rem; font-size: 1.25rem;">Generator Settings</h3>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">Main Keyword / Topic</label>
-                        <input type="text" id="keyword" placeholder="e.g. Minecraft, Vegan Cooking, Bitcoin">
+            <div class="generator-container">
+                <!-- Control Panel -->
+                <div class="input-card">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video Topic</label>
+                        <input type="text" id="topic-input" placeholder="e.g. Lo-fi study music, beginner guitar" style="width: 100%;">
                     </div>
-                    
-                    <div style="margin-bottom: 2rem;">
-                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">Video Style</label>
-                        <select id="niche" style="font-weight: 600;">
-                            <option value="tutorial">How-To / Tutorial</option>
-                            <option value="list">Listicle / Top 10</option>
-                            <option value="story">Storytime / Vlog</option>
-                            <option value="review">Review / Comparison</option>
-                            <option value="shock">Shocking / Viral</option>
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video Style</label>
+                        <select id="style-select" style="width: 100%;">
+                            <option value="Tutorial">Tutorial</option>
+                            <option value="Review">Review</option>
+                            <option value="Documentary">Documentary</option>
+                            <option value="Relaxing">Relaxing/Music</option>
+                            <option value="Educational">Educational</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shorts">Shorts/Quick Tips</option>
                         </select>
                     </div>
-                    
-                    <button id="generate-btn" class="btn-primary" style="width: 100%;">
-                        Generate Ideas ✨
-                    </button>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Hook Intensity</label>
+                        <div class="radio-set">
+                            <input type="radio" name="intensity" id="int-safe" value="safe">
+                            <label for="int-safe">Safe</label>
+                            
+                            <input type="radio" name="intensity" id="int-balanced" value="balanced" checked>
+                            <label for="int-balanced">Balanced</label>
+                            
+                            <input type="radio" name="intensity" id="int-aggressive" value="aggressive">
+                            <label for="int-aggressive">Aggressive</label>
+                        </div>
+                    </div>
+
+                    <button onclick="generateTitles()" class="btn-primary" style="width: 100%; height: 52px; font-size: 1rem; margin: 0;">Generate SEO Titles 🚀</button>
                 </div>
 
-                <!-- Results Card -->
-                <div class="tool-card" id="results-card" style="min-height: 440px; border: 2px dashed var(--border-color); background: var(--bg-secondary); cursor: default; padding:2rem; border-radius:var(--radius-lg);">
-                    <div id="empty-state" style="text-align: center; padding: 5rem 0;">
-                        <span style="font-size: 3rem; display: block; margin-bottom: 1.5rem;">💡</span>
-                        <h3 style="color: var(--text-secondary); font-weight: 700;">Ready to Generate</h3>
-                        <p style="color: var(--text-secondary); opacity: 0.7;">Enter a keyword to see viral title ideas.</p>
-                    </div>
-                    
-                    <div id="results" style="display: none;">
-                        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Suggested Titles</h3>
-                        <div id="title-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                            <!-- Results injected here -->
-                        </div>
+                <!-- Results Output -->
+                <div id="results-area" class="results-container">
+                    <div style="text-align: center; padding: 5rem 0; color: var(--text-secondary); opacity: 0.5;" id="placeholder">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">💡</span>
+                        <h3>Enter a topic to generate ideas</h3>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <div class="up-toast" id="copy-toast" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 24px; border-radius: 100px; font-weight: 600; display: none; z-index: 2000;">Copied! 📋</div>
+
     <creator-footer></creator-footer>
 
     <script src="/main.js?v=20260221"></script>
     <script>
-        const keywordInput = document.getElementById('keyword');
-        const nicheSelect = document.getElementById('niche');
-        const generateBtn = document.getElementById('generate-btn');
-        const resultsDiv = document.getElementById('results');
-        const titleList = document.getElementById('title-list');
-        const emptyState = document.getElementById('empty-state');
-        const resultsCard = document.getElementById('results-card');
+        const POWER_WORDS = ['Best', 'Proven', 'Easy', 'Fast', 'Smart', 'Secret', 'Ultimate', 'Step-by-step'];
+        const EMOTION_TRIGGERS = ['Stop', 'Avoid', 'Mistake', 'Truth', 'Warning', 'Don\'t', 'Finally'];
 
-        const templates = {
-            tutorial: [
-                "How to {kw} in 10 Minutes (Step by Step)",
-                "The Ultimate Guide to {kw} for Beginners",
-                "Stop Doing {kw} Wrong! (Do This Instead)",
-                "Master {kw} with this Simple Trick",
-                "I Tried {kw} for 30 Days and This Happened",
-                "The Secret to Perfect {kw} Revealed"
-            ],
-            list: [
-                "Top 10 {kw} Tips You Need to Know",
-                "7 {kw} Hacks That Actually Work",
-                "The 5 Best {kw} Tools in 2026",
-                "Ranked: Every {kw} From Worst to Best",
-                "15 {kw} Secrets Experts Won't Tell You"
-            ],
-            story: [
-                "Why I Quit {kw}...",
-                "The Truth About {kw} (My Experience)",
-                "I Spent $1000 on {kw} so You Don't Have To",
-                "My {kw} Journey: From Zero to Hero",
-                "The Day {kw} Changed My Life"
-            ],
-            review: [
-                "{kw} Review: Is It Worth It?",
-                "Don't Buy {kw} Until You Watch This",
-                "{kw} vs The Competition: The Winner is Clear",
-                "The Problem with {kw}...",
-                "Why Everyone is Talking About {kw}"
-            ],
-            shock: [
-                "You Won't Believe This {kw} Hack!",
-                "Is {kw} Dead in 2026?",
-                "The {kw} Apocalypse is Here",
-                "WARNING: Do Not Try {kw} at Home",
-                "This {kw} Mistake Cost Me Everything"
-            ]
-        };
+        function calculateSEOScore(title, keyword) {
+            let score = 0;
+            const tLow = title.toLowerCase();
+            const kLow = keyword.toLowerCase();
 
-        generateBtn.addEventListener('click', () => {
-            const kw = keywordInput.value.trim();
-            const niche = nicheSelect.value;
-            
-            if(!kw) {
-                alert('Please enter a keyword');
-                return;
-            }
-            
-            emptyState.style.display = 'none';
-            resultsDiv.style.display = 'block';
-            resultsCard.style.borderStyle = 'solid';
-            resultsCard.style.background = 'var(--bg-primary)';
+            if (tLow.indexOf(kLow) !== -1 && tLow.indexOf(kLow) < title.length * 0.3) score += 25;
+            if (/\d+/.test(title)) score += 15;
+            const seoWords = ['how', 'why', 'guide', 'tips', 'secrets'];
+            if (seoWords.some(w => tLow.includes(w))) score += 15;
+            if (title.length >= 45 && title.length <= 60) score += 15;
+            if (POWER_WORDS.some(w => tLow.includes(w.toLowerCase()))) score += 10;
+            if (EMOTION_TRIGGERS.some(w => tLow.includes(w.toLowerCase()))) score += 10;
+            const words = tLow.split(' ');
+            if (new Set(words).size === words.length) score += 10;
 
-            let ideas = templates[niche] || templates['tutorial'];
-            const generic = ["The Future of {kw}", "{kw} Explained in 5 Minutes"];
-            const allIdeas = [...ideas, ...generic];
-            const shuffled = allIdeas.sort(() => 0.5 - Math.random()).slice(0, 6);
+            return Math.min(100, score);
+        }
 
-            titleList.innerHTML = '';
-            shuffled.forEach(t => {
-                const finalTitle = t.replace(/{kw}/g, kw);
-                const item = document.createElement('div');
-                item.style.padding = '1.25rem';
-                item.style.background = 'var(--bg-secondary)';
-                item.style.borderRadius = '12px';
-                item.style.display = 'flex';
-                item.style.justifyContent = 'space-between';
-                item.style.alignItems = 'center';
-                item.style.gap = '1rem';
-                item.style.border = '1px solid var(--border-color)';
-                
-                item.innerHTML = `
-                    <span style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">${finalTitle}</span>
-                    <button class="btn-outline" style="height: 36px; padding: 0 1rem; font-size: 0.8rem; margin:0;" onclick="copyToClipboard('${finalTitle.replace(/'/g, "\\'")}', this)">Copy</button>
+        function generateTitles() {
+            const topic = document.getElementById('topic-input').value.trim();
+            const intensity = document.querySelector('input[name="intensity"]:checked').value;
+
+            if (!topic) return alert('Please enter a topic');
+
+            const resultsArea = document.getElementById('results-area');
+            resultsArea.innerHTML = ''; 
+
+            const templates = [
+                { t: `${topic}: Beginner Guide (2026)`, level: ['safe', 'balanced'] },
+                { t: `Everything You Need to Know About ${topic}`, level: ['safe', 'balanced'] },
+                { t: `How to Get Better Results with ${topic} Fast`, level: ['balanced', 'aggressive'] },
+                { t: `7 Common ${topic} Mistakes Beginners Make`, level: ['balanced', 'aggressive'] },
+                { t: `The Hidden Truth About ${topic} Revealed`, level: ['aggressive'] },
+                { t: `Before You Try ${topic}, Watch This!`, level: ['balanced', 'aggressive'] },
+                { t: `${topic} Explained in Exactly 5 Minutes`, level: ['safe', 'balanced'] },
+                { t: `Stop Doing This in ${topic} (Do This Instead)`, level: ['aggressive'] },
+                { t: `The Only ${topic} Strategy That Actually Works`, level: ['balanced', 'aggressive'] },
+                { t: `Master ${topic}: 5 Proven Tips That Save Time`, level: ['safe', 'balanced'] },
+                { t: `Why Most Creators Fail at ${topic}`, level: ['aggressive'] },
+                { t: `My Secret ${topic} Workflow for 2026`, level: ['balanced'] },
+                { t: `${topic} Review: Is It Actually Worth It?`, level: ['safe', 'balanced'] },
+                { t: `10 ${topic} Hacks You Should Have Used Sooner`, level: ['balanced', 'aggressive'] }
+            ];
+
+            const filtered = templates.filter(temp => temp.level.includes(intensity));
+            const selected = filtered.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+            selected.forEach(temp => {
+                const score = calculateSEOScore(temp.t, topic);
+                const card = document.createElement('div');
+                card.className = 'title-card';
+                card.innerHTML = `
+                    <div class="title-info">
+                        <div class="title-text">${temp.t}</div>
+                        <div class="seo-badge">SEO Score: ${score}/100</div>
+                    </div>
+                    <button class="btn-outline" style="height: 38px; padding: 0 12px; font-size: 0.8rem; margin: 0;" onclick="copyTitle('${temp.t.replace(/'/g, "\\'")}', this)">📋 Copy</button>
                 `;
-                titleList.appendChild(item);
+                resultsArea.appendChild(card);
             });
-        });
+        }
 
-        function copyToClipboard(text, btn) {
-            navigator.clipboard.writeText(text);
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.style.color = 'var(--brand-red)';
-            btn.style.borderColor = 'var(--brand-red)';
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.color = '';
-                btn.style.borderColor = '';
-            }, 2000);
+        function copyTitle(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = '✅ Saved';
+                const toast = document.getElementById('copy-toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    toast.style.display = 'none';
+                }, 2000);
+            });
         }
     </script>
-    <link rel="stylesheet" href="/assets/upload-panel.css?v=20260221">
-    <script defer src="/assets/upload-panel.js?v=20260221"></script>
 </body>
 </html>
