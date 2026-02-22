@@ -103,118 +103,131 @@
 
     <script src="/main.js?v=20260221"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const generateBtn = document.getElementById('generateBtn');
-            const videoTopic = document.getElementById('videoTopic');
-            const videoStyle = document.getElementById('videoStyle');
-            const titleResults = document.getElementById('titleResults');
-            const statusBadge = document.getElementById('statusBadge');
-            const progressFill = document.getElementById('progressFill');
-            const placeholder = document.getElementById('ai-assistant-placeholder');
-            const statusPanel = document.getElementById('status-panel');
-            const form = document.getElementById('generator-form');
+        (function() {
+            function initGenerator() {
+                const generateBtn = document.getElementById('generateBtn');
+                const videoTopic = document.getElementById('videoTopic');
+                const videoStyle = document.getElementById('videoStyle');
+                const titleResults = document.getElementById('titleResults');
+                const statusBadge = document.getElementById('statusBadge');
+                const progressFill = document.getElementById('progressFill');
+                const placeholder = document.getElementById('ai-assistant-placeholder');
+                const statusPanel = document.getElementById('status-panel');
+                const form = document.getElementById('generator-form');
 
-            if (form) form.addEventListener('submit', (e) => e.preventDefault());
+                if (form) form.addEventListener('submit', (e) => e.preventDefault());
 
-            if (generateBtn) {
-                generateBtn.addEventListener('click', () => {
-                    const topic = videoTopic.value.trim();
-                    if (!topic) {
-                        videoTopic.focus();
-                        return;
-                    }
-
-                    const style = videoStyle.value;
-                    const intensity = document.querySelector('input[name="intensity"]:checked')?.value || 'balanced';
-
-                    // Reset and Show UI
-                    if (placeholder) placeholder.style.display = 'none';
-                    if (statusPanel) statusPanel.style.display = 'block';
-                    if (titleResults) titleResults.innerHTML = '';
+                if (generateBtn) {
+                    // Remove existing listeners to avoid duplicates
+                    const newBtn = generateBtn.cloneNode(true);
+                    generateBtn.parentNode.replaceChild(newBtn, generateBtn);
                     
-                    statusBadge.innerText = 'Analyzing topic...';
-                    statusBadge.className = 'ai-status analyzing';
-                    progressFill.style.width = '30%';
+                    newBtn.addEventListener('click', () => {
+                        const topic = videoTopic.value.trim();
+                        if (!topic) {
+                            videoTopic.focus();
+                            return;
+                        }
 
-                    setTimeout(() => {
-                        progressFill.style.width = '100%';
-                        statusBadge.innerText = 'Done';
-                        statusBadge.className = 'ai-status ready';
+                        const intensity = document.querySelector('input[name="intensity"]:checked')?.value || 'balanced';
 
-                        const templates = {
-                            safe: [
-                                "The Ultimate Guide to [Topic]",
-                                "How to Master [Topic] in 2026",
-                                "10 Essential Tips for [Topic]",
-                                "Everything You Need to Know About [Topic]",
-                                "The Beginner's Guide to [Topic]",
-                                "Why [Topic] is More Important Than Ever",
-                                "Top 5 [Topic] Trends You Should Follow",
-                                "How to Get Started with [Topic]",
-                                "Improving Your [Topic] Skills Today",
-                                "The Secret to Better [Topic]"
-                            ],
-                            balanced: [
-                                "I Tried [Topic] for 30 Days (My Results)",
-                                "The Truth About [Topic] Finally Revealed",
-                                "Stop Making These [Topic] Mistakes",
-                                "How I Mastered [Topic] in One Week",
-                                "7 [Topic] Hacks You Didn't Know",
-                                "Is [Topic] Actually Worth It?",
-                                "The Future of [Topic] is Changing",
-                                "[Topic] vs [Topic]: Which is Better?",
-                                "Why Most People Fail at [Topic]",
-                                "My Secret [Topic] Strategy for 2026"
-                            ],
-                            aggressive: [
-                                "DO NOT Start [Topic] Until You Watch This!",
-                                "[Topic] is DEAD. (Here's Why)",
-                                "The SCARY Truth About [Topic]",
-                                "You're Doing [Topic] WRONG (Fix It Now)",
-                                "Watch This BEFORE You [Topic]",
-                                "The Most Dangerous [Topic] Mistake You're Making",
-                                "I Regret [Topic]...",
-                                "Why You're Failing at [Topic] (And How to Fix It)",
-                                "The 1% Secret to [Topic] Success",
-                                "How [Topic] Changed My Life Forever"
-                            ]
-                        };
-
-                        const selectedTemplates = templates[intensity] || templates.balanced;
+                        // UI Feedback
+                        if (placeholder) placeholder.style.display = 'none';
+                        if (statusPanel) statusPanel.style.display = 'block';
+                        if (titleResults) titleResults.innerHTML = '';
                         
-                        selectedTemplates.forEach((tpl, i) => {
-                            const title = tpl.replace(/\[Topic\]/g, topic);
-                            const score = Math.floor(Math.random() * 15) + 84; 
-                            
-                            const card = document.createElement('div');
-                            card.className = 'result-card-ai fade-in-up';
-                            card.style.animationDelay = `${i * 0.05}s`;
-                            card.innerHTML = `
-                                <div class="title-info">
-                                    <div style="font-weight:700; margin-bottom:6px;">${title}</div>
-                                    <span class="seo-badge" style="font-size: 0.75rem; color: var(--text-secondary);">Score: ${score}/100</span>
-                                </div>
-                                <button class="btn-outline" style="height:36px; font-size:0.8rem; margin:0;" onclick="copyToClipboard('${title.replace(/'/g, "\\'")}', this)">Copy</button>
-                            `;
-                            titleResults.appendChild(card);
-                        });
-                    }, 200);
-                });
-            }
-        });
+                        statusBadge.innerText = 'Analyzing topic...';
+                        statusBadge.className = 'ai-status analyzing';
+                        progressFill.style.width = '30%';
 
-        function copyToClipboard(text, btn) {
-            navigator.clipboard.writeText(text).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'Copied!';
-                const toast = document.getElementById('copy-toast');
-                if (toast) {
-                    toast.style.display = 'block';
-                    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+                        setTimeout(() => {
+                            progressFill.style.width = '100%';
+                            statusBadge.innerText = 'Done';
+                            statusBadge.className = 'ai-status ready';
+
+                            const templates = {
+                                safe: [
+                                    "The Ultimate Guide to [Topic]",
+                                    "How to Master [Topic] in 2026",
+                                    "10 Essential Tips for [Topic]",
+                                    "Everything You Need to Know About [Topic]",
+                                    "The Beginner's Guide to [Topic]",
+                                    "Why [Topic] is More Important Than Ever",
+                                    "Top 5 [Topic] Trends You Should Follow",
+                                    "How to Get Started with [Topic]",
+                                    "Improving Your [Topic] Skills Today",
+                                    "The Secret to Better [Topic]"
+                                ],
+                                balanced: [
+                                    "I Tried [Topic] for 30 Days (My Results)",
+                                    "The Truth About [Topic] Finally Revealed",
+                                    "Stop Making These [Topic] Mistakes",
+                                    "How I Mastered [Topic] in One Week",
+                                    "7 [Topic] Hacks You Didn't Know",
+                                    "Is [Topic] Actually Worth It?",
+                                    "The Future of [Topic] is Changing",
+                                    "[Topic] vs [Topic]: Which is Better?",
+                                    "Why Most People Fail at [Topic]",
+                                    "My Secret [Topic] Strategy for 2026"
+                                ],
+                                aggressive: [
+                                    "DO NOT Start [Topic] Until You Watch This!",
+                                    "[Topic] is DEAD. (Here's Why)",
+                                    "The SCARY Truth About [Topic]",
+                                    "You're Doing [Topic] WRONG (Fix It Now)",
+                                    "Watch This BEFORE You [Topic]",
+                                    "The Most Dangerous [Topic] Mistake You're Making",
+                                    "I Regret [Topic]...",
+                                    "Why You're Failing at [Topic] (And How to Fix It)",
+                                    "The 1% Secret to [Topic] Success",
+                                    "How [Topic] Changed My Life Forever"
+                                ]
+                            };
+
+                            const selectedTemplates = templates[intensity] || templates.balanced;
+                            
+                            selectedTemplates.forEach((tpl, i) => {
+                                const title = tpl.replace(/\[Topic\]/g, topic);
+                                const score = Math.floor(Math.random() * 15) + 84; 
+                                
+                                const card = document.createElement('div');
+                                card.className = 'result-card-ai fade-in-up';
+                                card.style.animationDelay = `${i * 0.05}s`;
+                                card.innerHTML = `
+                                    <div class="title-info">
+                                        <div style="font-weight:700; margin-bottom:6px;">${title}</div>
+                                        <span class="seo-badge" style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700;">Score: ${score}/100</span>
+                                    </div>
+                                    <button class="btn-outline" style="height:36px; font-size:0.8rem; margin:0;" onclick="window.copyToClipboard('${title.replace(/'/g, "\\'")}', this)">Copy</button>
+                                `;
+                                titleResults.appendChild(card);
+                            });
+                        }, 400); // Slightly longer for better UX feel
+                    });
                 }
-                setTimeout(() => { btn.innerText = originalText; }, 2000);
-            }).catch(() => {});
-        }
+            }
+
+            window.copyToClipboard = function(text, btn) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = btn.innerText;
+                    btn.innerText = 'Copied!';
+                    const toast = document.getElementById('copy-toast');
+                    if (toast) {
+                        toast.style.display = 'block';
+                        setTimeout(() => { toast.style.display = 'none'; }, 2000);
+                    }
+                    setTimeout(() => { btn.innerText = originalText; }, 2000);
+                }).catch(err => {
+                    console.error('Copy failed', err);
+                });
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initGenerator);
+            } else {
+                initGenerator();
+            }
+        })();
     </script>
 </body>
 </html>
