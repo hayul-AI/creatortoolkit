@@ -79,7 +79,14 @@
 
                     <div class="input-group" style="margin-bottom: 1.5rem;">
                         <label class="label-premium" style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Avg. View Duration (mm:ss)</label>
-                        <input type="text" id="duration-input" placeholder="e.g. 04:30" value="03:00">
+                        <div class="form-row" style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 1;">
+                                <input id="avdMinutes" type="number" min="0" inputmode="numeric" placeholder="mm" value="3" style="width: 100%;">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <input id="avdSeconds" type="number" min="0" max="59" inputmode="numeric" placeholder="ss" value="0" style="width: 100%;">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 1.5rem;">
@@ -90,10 +97,14 @@
 
                     <div class="input-group" style="margin-bottom: 2rem;">
                         <label class="label-premium" style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Ad Suitability / Niche</label>
-                        <select id="monetization-level">
-                            <option value="low">Low (Entertainment/Gaming)</option>
-                            <option value="mid" selected>Medium (Vlogs/Tech)</option>
-                            <option value="high">High (Finance/Business)</option>
+                        <select id="adSuitability" name="adSuitability" style="width: 100%;">
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Education / Knowledge">Education / Knowledge</option>
+                            <option value="Tech / How-To">Tech / How-To</option>
+                            <option value="Gaming">Gaming</option>
+                            <option value="Music">Music</option>
+                            <option value="Lifestyle / Hobby">Lifestyle / Hobby</option>
+                            <option value="Commentary / Opinion">Commentary / Opinion</option>
                         </select>
                     </div>
 
@@ -191,21 +202,36 @@
             });
         });
 
-        function parseDuration(val) {
-            if(!val.includes(':')) return parseInt(val) || 0;
-            const parts = val.split(':');
-            return (parseInt(parts[0]) * 60) + (parseInt(parts[1]) || 0);
-        }
-
         function calculateEarnings() {
             const type = document.querySelector('input[name="video-type"]:checked').value;
             const country = document.getElementById('country-input').value;
             const views = parseFloat(document.getElementById('views-input').value) || 0;
-            const duration = parseDuration(document.getElementById('duration-input').value);
-            const retention = parseFloat(document.getElementById('retention-input').value) / 100;
-            const mLevel = document.getElementById('monetization-level').value;
+            
+            // PATCH: read mm:ss inputs
+            const avdMinEl = document.getElementById("avdMinutes");
+            const avdSecEl = document.getElementById("avdSeconds");
 
-            if (views <= 0) return alert('Please enter view count');
+            const avdMinutes = avdMinEl && avdMinEl.value ? Number(avdMinEl.value) : 0;
+            const avdSeconds = avdSecEl && avdSecEl.value ? Number(avdSeconds.value) : 0;
+
+            // clamp seconds to 0–59 (AdSense-friendly: no alert)
+            const safeMin = Number.isFinite(avdMinutes) && avdMinutes > 0 ? avdMinutes : 0;
+            let safeSec = Number.isFinite(avdSeconds) && avdSeconds > 0 ? avdSeconds : 0;
+            if (safeSec > 59) safeSec = 59;
+
+            const avgViewDurationSeconds = Math.round(safeMin * 60 + safeSec);
+            const retention = parseFloat(document.getElementById('retention-input').value) / 100;
+            
+            // Map categories to original low/mid/high monetization levels
+            const selectedNiche = document.getElementById('adSuitability').value;
+            let mLevel = 'mid';
+            const highNiches = ['Education / Knowledge', 'Tech / How-To'];
+            const lowNiches = ['Entertainment', 'Gaming', 'Music'];
+            
+            if (highNiches.includes(selectedNiche)) mLevel = 'high';
+            else if (lowNiches.includes(selectedNiche)) mLevel = 'low';
+
+            if (views <= 0) return;
 
             // 1. Get Base RPM
             let baseRpmSet = RPM_DATA[country] || TIERS[COUNTRY_TIER_MAP[country]] || TIERS.tier3;
@@ -216,8 +242,8 @@
             
             // Duration
             if (type === 'long') {
-                if (duration >= 480) multiplier += 0.15; // Mid-rolls
-                else if (duration < 180) multiplier -= 0.15;
+                if (avgViewDurationSeconds >= 480) multiplier += 0.15; // Mid-rolls
+                else if (avgViewDurationSeconds < 180) multiplier -= 0.15;
             }
 
             // Retention
