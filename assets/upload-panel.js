@@ -1,5 +1,5 @@
 /**
- * YouTube MetaScore PRO - Production Version (Ultimate Singleton & Stability Fix)
+ * YouTube MetaScore PRO - Final Production Stability Fix
  */
 (function() {
     const STORAGE_KEY = 'metascore_state_pro';
@@ -16,20 +16,12 @@
     function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
     function init() {
-        // 1. Strict Singleton: Cleanup ANY existing versions
-        const selectors = [
-            '#upload-assistant-panel', 
-            '#up-maximize-fab', 
-            '.up-minimized-badge', 
-            '#ctk-metascore-container',
-            '#metascoreFloatWrap'
-        ];
-        selectors.forEach(s => {
-            document.querySelectorAll(s).forEach(el => el.remove());
-        });
+        // 1. Double-check cleanup to kill any "ghost" versions
+        const ghosts = ['#upload-assistant-panel', '#up-maximize-badge', '#ctk-metascore-container', '#metascorePanel'];
+        ghosts.forEach(s => document.querySelectorAll(s).forEach(el => el.remove()));
 
-        if (window._metascoreLoading) return;
-        window._metascoreLoading = true;
+        if (window._msProRunning) return;
+        window._msProRunning = true;
 
         createUI();
         setupEventListeners();
@@ -38,19 +30,18 @@
         setTimeout(() => {
             updateScore();
             restoreState();
-            window._metascoreLoading = false;
-        }, 100);
+        }, 150);
     }
 
     function createUI() {
         const panel = document.createElement('div');
         panel.id = 'upload-assistant-panel';
-        panel.className = 'metascore-pro-panel';
+        panel.style.cssText = 'position:fixed; z-index:2147483647 !important; pointer-events:auto !important;';
         
         panel.innerHTML = `
-            <div class="up-header" id="up-drag-handle">
+            <div class="up-header" id="up-drag-handle" style="cursor:grab !important; touch-action:none;">
                 <div class="up-header-title">🚀 METASCORE PRO</div>
-                <div style="display:flex; gap:10px; align-items:center;">
+                <div style="display:flex; gap:10px; align-items:center; pointer-events:auto;">
                     <button type="button" class="up-icon-btn reset-btn" id="up-reset-all" title="Clear All">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
@@ -74,7 +65,7 @@
 
                 <div class="up-field">
                     <div class="up-label-row"><span>VIDEO TITLE</span> <span id="up-title-cnt">0/100</span></div>
-                    <input type="text" class="up-input" id="up-title-in" maxlength="100" placeholder="Enter a catchy title...">
+                    <input type="text" class="up-input" id="up-title-in" maxlength="100" placeholder="Enter title...">
                 </div>
 
                 <div class="up-field">
@@ -94,26 +85,25 @@
                 <div class="up-field">
                     <div class="up-label-row"><span>HASHTAGS (MAX 5)</span> <span id="up-tag-cnt">0/5</span></div>
                     <div class="up-tag-container" id="up-tag-cont">
-                        <input type="text" class="up-input" id="up-tag-in" style="border:none; padding:4px; width:auto; flex:1;" placeholder="Add hashtag ↵">
+                        <input type="text" class="up-input" id="up-tag-in" placeholder="Add # ↵">
                     </div>
                 </div>
 
                 <div class="up-field">
                     <div class="up-label-row"><span>DESCRIPTION</span> <span id="up-desc-cnt">0</span></div>
-                    <textarea class="up-input" id="up-desc-in" style="min-height:140px;" placeholder="Write detailed video description..."></textarea>
+                    <textarea class="up-input" id="up-desc-in" style="min-height:120px;" placeholder="Video description..."></textarea>
                 </div>
             </div>
             <div class="up-footer">
-                <button type="button" class="up-btn up-btn-primary" id="up-copy-all">Copy Everything</button>
+                <button type="button" class="up-btn up-btn-primary" id="up-copy-all">Copy Everything ✨</button>
             </div>
             <div id="up-toast-container"></div>
         `;
         
-        // Redesigned Minimized Badge
         const badge = document.createElement('div');
         badge.id = 'up-maximize-badge';
         badge.className = 'up-minimized-badge';
-        badge.innerHTML = '<span class="icon">🚀</span> METASCORE';
+        badge.innerHTML = '<span class="icon">🚀</span> SCORE';
         badge.style.display = 'none';
 
         document.body.appendChild(panel);
@@ -122,35 +112,38 @@
 
     function setupEventListeners() {
         const sr = (id) => document.getElementById(id);
-        const titleIn = sr('up-title-in'), descIn = sr('up-desc-in'), tagIn = sr('up-tag-in'), catIn = sr('up-category-in');
+        const tIn = sr('up-title-in'), dIn = sr('up-desc-in'), tgIn = sr('up-tag-in'), cIn = sr('up-category-in');
 
-        titleIn.oninput = (e) => { state.content.title = e.target.value; updateCount('up-title-cnt', e.target.value.length, 100); updateScore(); saveState(); };
-        descIn.oninput = (e) => { state.content.description = e.target.value; sr('up-desc-cnt').innerText = e.target.value.length; updateScore(); saveState(); };
-        catIn.onchange = (e) => { state.content.category = e.target.value; updateScore(); saveState(); };
+        tIn.oninput = (e) => { state.content.title = e.target.value; updateCount('up-title-cnt', e.target.value.length, 100); updateScore(); saveState(); };
+        dIn.oninput = (e) => { state.content.description = e.target.value; sr('up-desc-cnt').innerText = e.target.value.length; updateScore(); saveState(); };
+        cIn.onchange = (e) => { state.content.category = e.target.value; updateScore(); saveState(); };
 
-        const processTags = () => {
-            const val = tagIn.value.trim(); if (!val) return;
-            const newTags = val.split(/[\s,]+/).map(t => t.trim().replace(/^#/, '')).filter(t => t !== '');
-            state.content.tags = [...new Set([...state.content.tags, ...newTags])].slice(0, 5);
-            tagIn.value = ''; renderTags(); updateScore(); saveState();
+        tgIn.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                const val = tgIn.value.trim().replace(/^#/, '');
+                if (val) {
+                    state.content.tags = [...new Set([...state.content.tags, val])].slice(0, 5);
+                    tgIn.value = ''; renderTags(); updateScore(); saveState();
+                }
+            }
         };
-        tagIn.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); processTags(); } };
 
         sr('up-copy-all').onclick = (e) => {
             e.preventDefault();
             const tags = (state.content.tags || []).map(t => `#${t}`).join(' ');
-            const category = catIn.options[catIn.selectedIndex] ? catIn.options[catIn.selectedIndex].text : '';
+            const category = cIn.options[cIn.selectedIndex] ? cIn.options[cIn.selectedIndex].text : '';
             const copyContent = `Title: ${state.content.title}\nCategory: ${category}\nHashtags: ${tags}\n\nDescription:\n${state.content.description}`;
-            copyToClipboard(copyContent);
+            navigator.clipboard.writeText(copyContent).then(() => showToast("Copied Content ✨"));
         };
 
         sr('up-minimize-x').onclick = () => setMinimized(true);
         sr('up-maximize-badge').onclick = () => setMinimized(false);
 
+        // Immediate reset without confirm as requested
         sr('up-reset-all').onclick = () => {
-            if(!confirm("Clear all MetaScore inputs?")) return;
             state.content = { title: '', description: '', tags: [], category: '' };
-            titleIn.value = descIn.value = catIn.value = tagIn.value = '';
+            tIn.value = dIn.value = cIn.value = tgIn.value = '';
             renderTags(); updateScore(); saveState();
             showToast("Inputs Cleared");
         };
@@ -177,22 +170,18 @@
         const c = state.content; let score = 0; let hints = [];
         if (!c.category) { score -= 10; hints.push("Select a category"); }
         const tl = (c.title || "").length;
-        if (tl > 45 && tl < 80) score += 30; else hints.push("Aim for 45-80 chars in title");
-        if ((c.description || "").length > 200) score += 30; else hints.push("Add more description detail");
-        if ((c.tags || []).length >= 3) score += 20; else hints.push("Add at least 3 hashtags");
+        if (tl > 45 && tl < 80) score += 30; else hints.push("Aim for 45-80 chars title");
+        if ((c.description || "").length > 200) score += 30; else hints.push("Add description detail");
+        if ((c.tags || []).length >= 3) score += 20; else hints.push("Add 3+ hashtags");
         const descLower = (c.description || "").toLowerCase();
         if (descLower.includes('subscribe') || descLower.includes('like')) score += 20; else hints.push("Add a CTA (Like/Sub)");
 
         const final = Math.max(0, Math.min(100, score));
         const root = document.getElementById('up-metascore-root'), stars = document.getElementById('up-score-stars'), val = document.getElementById('up-score-val');
-        
-        if (root) {
-            root.className = 'up-score-card metascore ' + (final < 40 ? 'tone-danger' : final < 70 ? 'tone-warn' : 'tone-good');
-        }
+        if (root) root.className = 'up-score-card metascore ' + (final < 40 ? 'tone-danger' : final < 70 ? 'tone-warn' : 'tone-good');
         if (stars) stars.style.width = `${final}%`;
         if (val) animateValue(val, lastScore, final, 400);
         lastScore = final;
-        
         const hintsEl = document.getElementById('up-hints');
         if (hintsEl) hintsEl.innerHTML = hints.slice(0, 3).map(h => `<li>${h}</li>`).join('');
     }
@@ -223,51 +212,52 @@
 
         let isDragging = false, startX, startY, initialTop, initialLeft;
 
-        handle.onmousedown = (e) => {
-            if (e.target.closest('button')) return;
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            initialTop = panel.offsetTop;
-            initialLeft = panel.offsetLeft;
-            panel.style.transition = 'none';
-            document.body.style.userSelect = 'none';
-        };
-
-        window.onmousemove = (e) => {
+        const onMove = (e) => {
             if (!isDragging) return;
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
+            e.preventDefault();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            const deltaX = clientX - startX;
+            const deltaY = clientY - startY;
+            
             state.position.top = initialTop + deltaY;
             state.position.left = initialLeft + deltaX;
             
-            state.position.top = Math.max(0, Math.min(window.innerHeight - 80, state.position.top));
-            state.position.left = Math.max(0, Math.min(window.innerWidth - 100, state.position.left));
-
             panel.style.top = `${state.position.top}px`;
             panel.style.left = `${state.position.left}px`;
             panel.style.right = 'auto';
         };
 
-        window.onmouseup = () => {
+        const onEnd = () => {
             if (isDragging) {
                 isDragging = false;
                 panel.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
                 document.body.style.userSelect = '';
                 saveState();
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onEnd);
             }
         };
+
+        handle.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('button')) return;
+            isDragging = true;
+            startX = e.clientX || (e.touches && e.touches[0].clientX);
+            startY = e.clientY || (e.touches && e.touches[0].clientY);
+            initialTop = panel.offsetTop;
+            initialLeft = panel.offsetLeft;
+            panel.style.transition = 'none';
+            document.body.style.userSelect = 'none';
+            
+            window.addEventListener('pointermove', onMove, { passive: false });
+            window.addEventListener('pointerup', onEnd);
+        });
     }
 
     function restoreState() {
         const panel = document.getElementById('upload-assistant-panel');
         if (!panel) return;
-
-        // Validation: if off-screen, reset to default
-        if (state.position.top > window.innerHeight || state.position.left > window.innerWidth) {
-            state.position = DEFAULTS.position;
-        }
-
         panel.style.top = `${state.position.top}px`;
         panel.style.left = `${state.position.left}px`;
         panel.style.right = 'auto';
@@ -276,17 +266,9 @@
         if (tIn) tIn.value = state.content.title || '';
         if (dIn) dIn.value = state.content.description || '';
         if (cIn) cIn.value = state.content.category || '';
-        
         updateCount('up-title-cnt', (state.content.title || '').length, 100);
-        const dCnt = document.getElementById('up-desc-cnt');
-        if (dCnt) dCnt.innerText = (state.content.description || '').length;
-        
         renderTags();
         setMinimized(state.isMinimized);
-    }
-
-    function copyToClipboard(txt) {
-        navigator.clipboard.writeText(txt).then(() => showToast("Copied Content ✨"));
     }
 
     function showToast(msg) {
@@ -299,5 +281,5 @@
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 2000);
     }
 
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+    init();
 })();
