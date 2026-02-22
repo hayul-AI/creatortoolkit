@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YouTube Consultant | CreatorToolkit</title>
+  <meta name="description" content="Local YouTube consulting based on category, subscribers, AVD, CTR, and country. 100% browser-based." />
+  <link rel="stylesheet" href="/style.css?v=20260221" />
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-secondary">
+  <creator-header></creator-header>
+
+  <main style="padding: 5rem 0;">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 4rem;">
+        <h1 style="font-size: 3rem; letter-spacing: -0.02em; margin-bottom: 1rem;">YouTube Consultant</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem;">Answer a few questions and get an actionable plan. (Local analysis only)</p>
+      </div>
+
+      <div class="tool-grid-2">
+        <div class="card result-card-ai" style="display:block; padding:2rem; cursor:default; min-height:auto;">
+          <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:1.5rem;">Your Channel Inputs</h2>
+
+          <div class="form-group">
+            <label>Channel Category</label>
+            <select id="ytCategory">
+              <option>Entertainment</option>
+              <option>Education / Knowledge</option>
+              <option>Tech / How-To</option>
+              <option>Gaming</option>
+              <option>Music</option>
+              <option>Lifestyle / Hobby</option>
+              <option>Commentary / Opinion</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Subscribers</label>
+            <input id="subs" type="number" min="0" inputmode="numeric" placeholder="e.g. 1200" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>AVD (minutes)</label>
+              <input id="avdMin" type="number" min="0" step="0.1" inputmode="decimal" placeholder="e.g. 3.5" />
+            </div>
+            <div class="form-group">
+              <label>AVD (seconds)</label>
+              <input id="avdSec" type="number" min="0" max="59" inputmode="numeric" placeholder="e.g. 20" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Impressions CTR (%)</label>
+            <input id="ctr" type="number" min="0" max="30" step="0.1" inputmode="decimal" placeholder="e.g. 4.8" />
+            <div class="hint">No data is sent anywhere. Local-only estimation.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Main Viewer Country</label>
+            <input id="country" type="text" placeholder="e.g. Korea, USA, Japan, Global" />
+            <div class="hint">If worldwide, type <b>Global</b>.</div>
+          </div>
+
+          <button id="consultBtn" class="btn-primary btn-block" style="margin-top:1.5rem; width:100%; height:52px;" type="button">Get Consulting Plan ✨</button>
+          <div class="micro-note">100% browser-based. No network calls.</div>
+        </div>
+
+        <div class="card result-card-ai" style="display:block; padding:2rem; cursor:default; min-height:auto;">
+          <div class="ai-header">
+            <h2 style="font-size:1.2rem; font-weight:800; margin:0;">Consulting Output</h2>
+            <span id="statusBadge" class="ai-status">Ready</span>
+          </div>
+
+          <div class="ai-gauge-container progress-bar"><div id="progressFill" class="ai-gauge-fill progress-fill"></div></div>
+
+          <div id="consultOutput" class="results-container" style="margin-top:1.5rem;">
+            <div class="result-empty">Fill the inputs and click “Get Consulting Plan”.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <creator-footer></creator-footer>
+
+  <script src="/main.js?v=20260221"></script>
+  <script src="/assets/js/consultant.js" defer></script>
+</body>
+</html>
