@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     registerWebComponents();
     injectBottomNav();
     detectHomePage();
+    loadMetaScore();
 });
 
 function initTheme() {
@@ -11,6 +12,36 @@ function initTheme() {
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     // Ensure UI is updated after web components might have rendered
     setTimeout(() => updateThemeToggleUI(savedTheme), 0);
+}
+
+function loadMetaScore() {
+    // Pages to EXCLUDE
+    const EXCLUDE = ["guides", "about", "privacy", "terms", "contact"];
+    const p = (location.pathname || "").toLowerCase();
+    if (EXCLUDE.some(x => p.includes(x))) return;
+
+    // Inject CSS if missing
+    if (!document.querySelector('link[href*="upload-panel.css"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/assets/upload-panel.css';
+        document.head.appendChild(link);
+    }
+
+    // Inject Panel Logic if missing
+    if (!document.querySelector('script[src*="upload-panel.js"]')) {
+        const script = document.createElement('script');
+        script.src = '/assets/upload-panel.js';
+        script.defer = true;
+        document.body.appendChild(script);
+    }
+
+    // Inject Floating Controller if missing
+    if (!document.querySelector('script[src*="metascore-float.js"]')) {
+        const script = document.createElement('script');
+        script.src = '/assets/js/metascore-float.js';
+        document.body.appendChild(script);
+    }
 }
 
 function toggleTheme() {

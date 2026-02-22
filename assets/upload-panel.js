@@ -33,6 +33,7 @@
     function createUI() {
         const panel = document.createElement('div');
         panel.id = 'upload-assistant-panel';
+        panel.setAttribute('id', 'metascorePanel'); // Add requested ID
         if (!state.isOpen) panel.classList.add('hidden');
 
         panel.innerHTML = `
@@ -40,7 +41,7 @@
                 <div class="up-header-title">🚀 METASCORE</div>
                 <div style="display:flex; gap:8px;">
                     <button class="up-icon-btn" id="up-reset-pos" title="Reset Position">🔄</button>
-                    <button class="up-icon-btn" id="up-close-x">✕</button>
+                    <button class="up-icon-btn" id="up-close-x" data-metascore-close>✕</button>
                 </div>
             </div>
             <div class="up-body">

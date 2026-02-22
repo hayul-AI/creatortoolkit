@@ -40,27 +40,21 @@
                 <!-- Control Panel -->
                 <div class="card-premium">
                     <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Category</label>
-                        <select id="cat-select" style="width: 100%;">
-                            <option value="">Select Category...</option>
+                        <label for="videoType" style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video Type</label>
+                        <select id="videoType" style="width: 100%;">
                             <option value="Entertainment">Entertainment</option>
-                            <option value="Education">Education / Knowledge</option>
-                            <option value="Tech">Tech / How-To</option>
+                            <option value="Education / Knowledge">Education / Knowledge</option>
+                            <option value="Tech / How-To">Tech / How-To</option>
                             <option value="Gaming">Gaming</option>
                             <option value="Music">Music</option>
-                            <option value="Lifestyle">Lifestyle / Hobby</option>
-                            <option value="Commentary">Commentary / Opinion</option>
+                            <option value="Lifestyle / Hobby">Lifestyle / Hobby</option>
+                            <option value="Commentary / Opinion">Commentary / Opinion</option>
                         </select>
                     </div>
 
                     <div class="form-group" style="margin-bottom: 1.5rem;">
                         <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video Title</label>
                         <input type="text" id="title-input" placeholder="Paste your YouTube title here..." style="width: 100%;">
-                    </div>
-
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Target Keywords</label>
-                        <input type="text" id="kw-input" placeholder="ex) lofi study, focus, relax" style="width: 100%;">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 2rem;">
@@ -113,111 +107,101 @@
     <script src="/main.js?v=20260221"></script>
     <script>
         const STORAGE_KEYS = {
-            cat: 'descgen.category',
+            type: 'descgen.videoType',
             title: 'descgen.title',
-            kw: 'descgen.keywords',
             cta: 'descgen.cta',
             output: 'descgen.output'
         };
 
-        const TEMPLATES = {
-            Entertainment: [
-                "Welcome back! Today we are looking at {title}. This video is packed with amazing moments and reactions that you don't want to miss. We put a lot of effort into highlighting the best parts of {keywords} for you. Whether you're here for the laughs or the intense energy, this session has something for everyone. Make sure to watch until the end for the surprise twist! Our goal is to bring you the highest quality entertainment every single day. Let us know your favorite part in the comments below!"
-            ],
-            Education: [
-                "In this lesson, we deep dive into {title}. Understanding the core concepts of {keywords} is essential for anyone looking to master this field. We break down complex topics into simple, easy-to-follow steps so you can learn effectively. This comprehensive guide covers everything from the fundamentals to advanced techniques. We believe that knowledge should be accessible to everyone, and this video is a step towards that. Join our community of learners and start your journey today!"
-            ],
-            Tech: [
-                "Solving problems with {title} just got easier! In this tutorial, I'll show you how to set up and optimize {keywords} like a pro. Many people struggle with the initial configuration, but we've simplified the entire process for you. From installation to the final result, every step is clearly explained. Make sure you have your tools ready as we go through this together. If you encounter any issues, feel free to reach out. Technology is meant to empower us, and this workflow is a perfect example."
-            ],
-            Gaming: [
-                "Leveling up in {title}! Today we are exploring new builds and strategies for {keywords}. The current meta is shifting, and staying ahead of the competition is key. Watch as we navigate through challenging levels and showcase some insane high-skill gameplay. We also share some hidden secrets that most players overlook. Whether you're a casual gamer or a competitive pro, there's a lot to learn from this session. Don't forget to join our Discord for more gaming tips and community events!"
-            ],
-            Music: [
-                "Immerse yourself in the sound of {title}. This collection features the best of {keywords}, carefully curated to create the perfect atmosphere. Whether you're studying, working, or just relaxing at home, these tracks will help you find your flow. We focus on high-fidelity audio and seamless transitions to provide a premium listening experience. Let the melodies of {keywords} guide your productivity and peace of mind. Subscribe for your daily dose of high-quality music and ambient vibes."
-            ],
-            Lifestyle: [
-                "Sharing my journey with {title}. In this video, I take you through my daily routine and how {keywords} plays a major role in my life. It's all about finding balance and pursuing what you love every single day. I'm also sharing some personal tips and tricks that have helped me stay consistent and motivated. Hopefully, this inspires you to start your own routine and find joy in the little things. Life is a beautiful adventure, and I'm glad to have you along for the ride."
-            ],
-            Commentary: [
-                "Let's talk about {title}. There has been a lot of discussion lately regarding {keywords}, and I wanted to share my perspective on the matter. We'll analyze the different viewpoints and look at the underlying facts that often get ignored. This video aims to provide a balanced and thoughtful take on current trends. I'm curious to hear what you think about this development. Is this the future, or just a passing phase? Join the conversation in the comments and let's discuss this together."
-            ]
-        };
-
-        const FILLERS = [
-            "We strive to provide valuable content that makes a difference in your creative workflow.",
-            "Our community is growing every day, and your support means the world to us.",
-            "Stay tuned for more updates and deep dives into the topics you care about most.",
-            "Every like and share helps us reach more creators just like you."
-        ];
-
         document.addEventListener('DOMContentLoaded', () => {
             const sr = (id) => document.getElementById(id);
-            sr('cat-select').value = localStorage.getItem(STORAGE_KEYS.cat) || '';
+            const savedType = localStorage.getItem(STORAGE_KEYS.type);
+            if (savedType) sr('videoType').value = savedType;
             sr('title-input').value = localStorage.getItem(STORAGE_KEYS.title) || '';
-            sr('kw-input').value = localStorage.getItem(STORAGE_KEYS.kw) || '';
             sr('output-text').value = localStorage.getItem(STORAGE_KEYS.output) || '';
             const savedCta = localStorage.getItem(STORAGE_KEYS.cta);
-            if (savedCta) document.querySelector(`input[name="cta"][value="${savedCta}"]`).checked = true;
+            if (savedCta) {
+                const ctaEl = document.querySelector(`input[name="cta"][value="${savedCta}"]`);
+                if (ctaEl) ctaEl.checked = true;
+            }
             updateCounter();
         });
 
-        function handleGenerate() {
-            const cat = document.getElementById('cat-select').value;
-            const title = document.getElementById('title-input').value.trim();
-            let kws = document.getElementById('kw-input').value.trim();
-            const ctaType = document.querySelector('input[name="cta"]:checked').value;
-
-            if (!cat || !title) return alert('Category and Title are required');
-
-            // Save inputs
-            localStorage.setItem(STORAGE_KEYS.cat, cat);
-            localStorage.setItem(STORAGE_KEYS.title, title);
-            localStorage.setItem(STORAGE_KEYS.kw, kws);
-            localStorage.setItem(STORAGE_KEYS.cta, ctaType);
-
-            // Keyword Extraction if empty
-            if (!kws) {
-                kws = title.split(' ').filter(w => w.length > 3).slice(0, 2).join(', ');
-            }
-
-            // Get Base Template
-            const pool = TEMPLATES[cat] || TEMPLATES.Entertainment;
-            let output = pool[Math.floor(Math.random() * pool.length)];
-            output = output.replace(/{title}/g, title).replace(/{keywords}/g, kws);
-
-            // Add CTA
-            const ctaMap = {
-                soft: "\n\nIf you enjoyed this, feel free to subscribe for more.",
-                standard: "\n\nThanks for watching! Please LIKE and SUBSCRIBE if you found this helpful. See you in the next one!",
-                strong: "\n\n🚀 Join our mission! SUBSCRIBE now and turn on NOTIFICATIONS so you never miss a viral update. Leave a COMMENT if you agree!"
-            };
-            output += ctaMap[ctaType];
-
-            // Length Balancer (Target 450-550)
-            while (output.length < 450) {
-                output += " " + FILLERS[Math.floor(Math.random() * FILLERS.length)];
-            }
-            if (output.length > 550) {
-                const sentences = output.split('. ');
-                while (output.length > 550 && sentences.length > 3) {
-                    sentences.splice(sentences.length - 2, 1); // Remove from near end
-                    output = sentences.join('. ') + (output.endsWith('.') ? '' : '.');
-                }
-            }
-
-            const final = output.trim();
-            document.getElementById('output-text').value = final;
-            localStorage.setItem(STORAGE_KEYS.output, final);
-            updateCounter();
-            generateHashtags(title + " " + kws);
+        function extractTitleTerms(title) {
+            const stop = new Set(["the","a","an","and","or","of","to","in","for","with","on","at","by","from","is","are","be","how","why","what","when","your","you"]);
+            const clean = title
+                .toLowerCase()
+                .replace(/[\[\](){}:;,.!?'"“”‘’]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+            const words = clean.split(" ").filter(w => w && !stop.has(w) && w.length >= 3);
+            const freq = {};
+            for (const w of words) freq[w] = (freq[w] || 0) + 1;
+            const ranked = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+            return ranked.slice(0, 5); // top terms
         }
 
-        function generateHashtags(text) {
-            const words = text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
-            const unique = [...new Set(words)].filter(w => w.length > 3).slice(0, 5);
-            const tags = unique.map(w => '#' + w);
+        function buildDescription({videoType, title, ctaStyle}){
+            const terms = extractTitleTerms(title);
+            const main = terms[0] || "tips";
+            const secondary = terms[1] || "guide";
+
+            const openers = {
+                "Entertainment": `In this video, we dive into ${main} with a fresh, entertaining angle — built to keep you watching to the end.`,
+                "Education / Knowledge": `This video breaks down ${main} in a clear, step-by-step way so you can learn faster and remember more.`,
+                "Tech / How-To": `Follow this practical ${secondary} to improve ${main} with simple, repeatable steps you can apply right away.`,
+                "Gaming": `Today we cover ${main} with gameplay-focused tips, smart strategies, and moments you don’t want to miss.`,
+                "Music": `Immerse yourself in ${main} — crafted for listening, focus, and vibe. Perfect for study, work, or late-night sessions.`,
+                "Lifestyle / Hobby": `If you’re into ${main}, this is for you — easy ideas, small upgrades, and a realistic approach that fits daily life.`,
+                "Commentary / Opinion": `Here’s my take on ${main} — what matters, what doesn’t, and the key points people often overlook.`
+            };
+
+            const opener = openers[videoType] || openers["Education / Knowledge"];
+
+            const titleLine = title ? `\n\n🎬 Title: ${title}` : "";
+            const seoLine = terms.length
+                ? `\n\n✅ In this episode we touch on: ${terms.slice(0,4).join(", ")}.`
+                : "";
+
+            let ctaLine = "";
+            const style = ctaStyle.toLowerCase();
+            if (style === "soft") ctaLine = `\n\nIf this helped, consider liking the video and checking the channel for more.`;
+            if (style === "standard") ctaLine = `\n\n👍 Like, comment what you want next, and subscribe for weekly uploads.`;
+            if (style === "strong") ctaLine = `\n\n🔥 Drop a COMMENT with your question, hit LIKE, and SUBSCRIBE so you don’t miss the next one.`;
+
+            // Keep around ~500 chars by trimming gently
+            let out = `${opener}${titleLine}${seoLine}${ctaLine}`.trim();
+            if (out.length > 520) out = out.slice(0, 510).trim() + "...";
+            return out;
+        }
+
+        function buildHashtags(videoType, title){
+            const base = extractTitleTerms(title).slice(0, 4);
+            const typeTag = videoType.toLowerCase().replace(/\s*\/\s*/g,"").replace(/\s+/g,"");
+            const tags = [...base, typeTag].filter(Boolean).slice(0, 5);
+            return tags.map(t => "#" + t.replace(/[^a-z0-9]/g,""));
+        }
+
+        function handleGenerate() {
+            const videoType = document.getElementById('videoType').value;
+            const title = document.getElementById('title-input').value.trim();
+            const ctaStyle = document.querySelector('input[name="cta"]:checked').value;
+
+            if (!videoType || !title) return alert('Video Type and Title are required');
+
+            // Save inputs
+            localStorage.setItem(STORAGE_KEYS.type, videoType);
+            localStorage.setItem(STORAGE_KEYS.title, title);
+            localStorage.setItem(STORAGE_KEYS.cta, ctaStyle);
+
+            const desc = buildDescription({ videoType, title, ctaStyle });
             
+            document.getElementById('output-text').value = desc;
+            localStorage.setItem(STORAGE_KEYS.output, desc);
+            updateCounter();
+
+            // Render Hashtags
+            const tags = buildHashtags(videoType, title);
             const root = document.getElementById('hashtag-root');
             const list = document.getElementById('hashtag-list');
             root.style.display = 'block';
