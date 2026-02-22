@@ -40,7 +40,15 @@
             <div class="up-header" id="up-drag-handle">
                 <div class="up-header-title">🚀 METASCORE</div>
                 <div style="display:flex; gap:8px;">
-                    <button class="up-icon-btn" id="up-reset-pos" title="Reset Position">🔄</button>
+                    <button class="up-icon-btn" id="up-reset-all" title="Reset" aria-label="Reset MetaScore inputs">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M8 6V4h8v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M6 6l1 16h10l1-16" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                          <path d="M10 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
                     <button class="up-icon-btn" id="up-close-x" data-metascore-close>✕</button>
                 </div>
             </div>
@@ -94,13 +102,6 @@
             <div class="up-toast" id="up-toast">Copied!</div>
         `;
         document.body.appendChild(panel);
-
-        const openBtn = document.createElement('button');
-        openBtn.id = 'up-global-open';
-        openBtn.className = 'up-open-btn';
-        openBtn.innerHTML = '🚀';
-        if (state.isOpen) openBtn.style.display = 'none';
-        document.body.appendChild(openBtn);
     }
 
     function setupEventListeners() {
@@ -157,10 +158,30 @@
         };
 
         sr('up-close-x').onclick = () => togglePanel(false);
-        sr('up-global-open').onclick = () => togglePanel(true);
-        sr('up-reset-pos').onclick = () => {
-            state.position = { top: 100, left: 30 };
-            restorePanel();
+        sr('up-reset-all').onclick = () => {
+            // 1) Title input 비우기
+            state.content.title = '';
+            sr('up-title-in').value = '';
+            sr('up-title-cnt').innerText = '0/100';
+
+            // 2) Category select 기본값으로 되돌리기
+            state.content.category = '';
+            sr('up-category-in').value = '';
+
+            // 3) Hashtags(칩/태그) 전부 삭제 + 입력창도 비우기
+            state.content.tags = [];
+            sr('up-tag-in').value = '';
+            renderTags();
+
+            // 4) Description textarea 비우기
+            state.content.description = '';
+            sr('up-desc-in').value = '';
+            sr('up-desc-cnt').innerText = '0';
+
+            // 5) MetaScore 즉시 재계산/리셋 상태로 반영
+            updateScore();
+
+            // 6) localStorage 초기화 (DEFAULTS의 content와 매칭)
             saveState();
         };
     }
@@ -281,7 +302,6 @@
     function togglePanel(open) {
         state.isOpen = open;
         document.getElementById('upload-assistant-panel').classList.toggle('hidden', !open);
-        document.getElementById('up-global-open').style.display = open ? 'none' : 'block';
         saveState();
     }
 

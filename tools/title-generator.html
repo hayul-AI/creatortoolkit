@@ -172,16 +172,26 @@
                                                     } else {
                                                         const power = ["SHOCKING", "NEVER", "UNBELIEVABLE", "SCARY", "INSANE"];
                                                         const p = power[Math.floor(Math.random() * power.length)];
-                                                        return `${p}: ${base} - You Won't Believe This!`;
+                                                        const suffix = [" (MUST WATCH)", " (INSANE)", " (SHOCKING)", "! NO WAY"];
+                                                        return `${p}: ${base}${suffix[Math.floor(Math.random() * suffix.length)]}`;
                                                     }
                                                 };
                         
+                                                function limitTitleLength(str, maxLen = 70) {
+                                                    const s = String(str || "").replace(/\s+/g, " ").trim();
+                                                    if (s.length <= maxLen) return s;
+
+                                                    // Prefer cutting at a space before maxLen if possible (cleaner)
+                                                    const cut = s.slice(0, maxLen);
+                                                    const lastSpace = cut.lastIndexOf(" ");
+                                                    if (lastSpace >= maxLen - 15) return cut.slice(0, lastSpace).trim() + "..."; 
+                                                    return cut.trim() + "...";
+                                                }
+
                                                 // Helper for Title Case and Length
                                                 const finalize = (str) => {
                                                     let final = str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-                                                    if (final.length < 45) final += " In 2026";
-                                                    if (final.length > 65) final = final.substring(0, 62) + "...";
-                                                    return final;
+                                                    return limitTitleLength(final);
                                                 };
                         
                                                 const titles = [];
@@ -196,7 +206,7 @@
                                                     card.style.animationDelay = `${i * 0.05}s`;
                                                     card.innerHTML = `
                                                         <div class="title-info">
-                                                            <div style="font-weight:700; margin-bottom:6px;">${title}</div>
+                                                            <div class="vtg-result-title" style="font-weight:700; margin-bottom:6px;">${title}</div>
                                                             <span class="seo-badge" style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700;">Score: ${score}/100</span>
                                                         </div>
                                                         <button class="btn-outline" style="height:36px; font-size:0.8rem; margin:0;" onclick="window.copyToClipboard('${title.replace(/'/g, "\\'")}', this)">Copy</button>
@@ -230,5 +240,6 @@
             }
         })();
     </script>
+    <script src="/assets/js/metascore-panel.js"></script>
 </body>
 </html>

@@ -68,7 +68,6 @@ class UploadAssistant extends HTMLElement {
         
         const icons = {
             close: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`,
-            open: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>`,
             drag: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>`,
             copy: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg>`,
             magic: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`
@@ -111,25 +110,6 @@ class UploadAssistant extends HTMLElement {
                 max-height: 85vh;
                 display: ${s.isOpen ? 'flex' : 'none'};
             }
-
-            .ua-minimized {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                background: var(--ua-accent);
-                color: white;
-                border-radius: 50%;
-                display: ${s.isOpen ? 'none' : 'flex'};
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
-                z-index: 10000;
-                transition: transform 0.2s;
-            }
-            .ua-minimized:hover { transform: scale(1.1); }
 
             .ua-header {
                 padding: 10px 15px;
@@ -271,10 +251,6 @@ class UploadAssistant extends HTMLElement {
 
         </style>
 
-        <div class="ua-minimized" id="toggle-btn" title="Open Upload Assistant">
-            ${icons.open}
-        </div>
-
         <div class="ua-panel" id="panel">
             <div class="ua-header" id="drag-handle">
                 <div class="ua-title-area">
@@ -362,7 +338,6 @@ class UploadAssistant extends HTMLElement {
     setupEvents() {
         const sr = this.shadowRoot;
         
-        sr.getElementById('toggle-btn').onclick = () => this.togglePanel(true);
         sr.getElementById('close-btn').onclick = () => this.togglePanel(false);
 
         const titleInput = sr.getElementById('title-input');
@@ -593,7 +568,6 @@ ${tags}`;
     togglePanel(isOpen) {
         this.state.isOpen = isOpen;
         this.shadowRoot.getElementById('panel').style.display = isOpen ? 'flex' : 'none';
-        this.shadowRoot.getElementById('toggle-btn').style.display = isOpen ? 'none' : 'flex';
         this.saveState();
     }
 

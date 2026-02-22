@@ -19,19 +19,6 @@
     return qs("#metascorePanel") || qs(".metascore-panel") || qs("[data-metascore-panel]") || qs("#upload-assistant-panel");
   }
 
-  function ensureReopenButton() {
-    let btn = qs("#metascoreReopenBtn");
-    if (btn) return btn;
-
-    btn = document.createElement("button");
-    btn.id = "metascoreReopenBtn";
-    btn.className = "metascore-reopen-btn is-hidden";
-    btn.type = "button";
-    btn.innerHTML = "🚀 MetaScore";
-    document.body.appendChild(btn);
-    return btn;
-  }
-
   function wrapAsFloating(panelEl) {
     // If already wrapped, do nothing
     if (panelEl.closest(".metascore-float")) return panelEl.closest(".metascore-float");
@@ -62,17 +49,15 @@
     return v === "1";
   }
 
-  function applyVisibility(wrapper, reopenBtn, isOpen) {
+  function applyVisibility(wrapper, isOpen) {
     if (isOpen) {
       wrapper.classList.remove("is-hidden");
-      reopenBtn.classList.add("is-hidden");
     } else {
       wrapper.classList.add("is-hidden");
-      reopenBtn.classList.remove("is-hidden");
     }
   }
 
-  function bindCloseButton(wrapper, reopenBtn) {
+  function bindCloseButton(wrapper) {
     // Find close button inside metascore panel (X)
     // Adjust selector to match your close icon button.
     const closeBtn =
@@ -86,16 +71,7 @@
       closeBtn.__metascoreBound = true;
       closeBtn.addEventListener("click", () => {
         setOpenState(false);
-        applyVisibility(wrapper, reopenBtn, false);
-      });
-    }
-
-    // Reopen
-    if (!reopenBtn.__metascoreBound) {
-      reopenBtn.__metascoreBound = true;
-      reopenBtn.addEventListener("click", () => {
-        setOpenState(true);
-        applyVisibility(wrapper, reopenBtn, true);
+        applyVisibility(wrapper, false);
       });
     }
   }
@@ -114,12 +90,11 @@
         return;
     }
 
-    const reopenBtn = ensureReopenButton();
     const wrapper = wrapAsFloating(panel);
 
     const open = getOpenState();
-    applyVisibility(wrapper, reopenBtn, open);
-    bindCloseButton(wrapper, reopenBtn);
+    applyVisibility(wrapper, open);
+    bindCloseButton(wrapper);
   }
 
   // DOM ready
