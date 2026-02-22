@@ -108,39 +108,132 @@
             </div>
         </div>
 
-        <!-- Guide Section -->
-        <section style="padding: 6rem 0;">
+        <!-- YouTube Success Strategy Guide Section -->
+        <section class="guide-section" style="padding: 6rem 0; background: var(--bg-primary);">
             <div class="container">
-                <div class="tool-grid-2">
-                    <div>
-                        <h2>Master the Algorithm</h2>
-                        <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1.1rem;">Success on YouTube isn't luck. It's about optimizing every element of your video for maximum Click-Through Rate (CTR) and Retention.</p>
-                        <ul style="list-style: none; margin-bottom: 2rem; padding: 0;">
-                            <li style="margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; font-weight: 600;">
-                                <div style="width: 24px; height: 24px; background: var(--brand-red-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-red);">✓</div>
-                                100% Privacy Focused (Local Processing)
-                            </li>
-                            <li style="margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; font-weight: 600;">
-                                <div style="width: 24px; height: 24px; background: var(--brand-red-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-red);">✓</div>
-                                Built for Creators by Creators
-                            </li>
-                            <li style="margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; font-weight: 600;">
-                                <div style="width: 24px; height: 24px; background: var(--brand-red-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-red);">✓</div>
-                                Updated for 2026 Standards
-                            </li>
-                        </ul>
-                        <a href="/about.html" class="btn-outline" style="display: inline-flex; width: auto;">Learn More About Us</a>
-                    </div>
-                    <div style="background: var(--brand-red); color: white; padding: clamp(1.5rem, 5vw, 3rem); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
-                        <h3 style="color: white; font-size: 1.75rem; margin-bottom: 1rem;">Free SEO Audit</h3>
-                        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; line-height: 1.6;">Use our professional toolset to check your video strength before publishing. It's like having a senior SEO expert by your side.</p>
-                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 1rem;">
-                            <p style="font-size: 0.95rem; font-weight: 600;">Optimized for YouTube algorithm standards in 2026.</p>
-                        </div>
-                    </div>
+                <div style="text-align: center; margin-bottom: 4rem;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">YouTube Success Strategy Guide</h2>
+                    <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Actionable tutorials to grow your channel, improve CTR, retention, and monetization.</p>
+                </div>
+
+                <div id="guide-grid" class="guide-grid">
+                    <!-- Dynamic guides will be injected here -->
                 </div>
             </div>
         </section>
+
+        <style>
+            .guide-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2.5rem;
+            }
+            .guide-card {
+                background: var(--bg-primary);
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                border: 1px solid var(--border-color);
+                display: flex;
+                flex-direction: column;
+                text-decoration: none;
+                color: inherit;
+            }
+            .guide-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+                border-color: var(--brand-red);
+            }
+            .guide-card-img {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                object-fit: cover;
+            }
+            .guide-card-content {
+                padding: 1.5rem;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            .guide-card-category {
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: var(--brand-red);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin-bottom: 0.75rem;
+            }
+            .guide-card-title {
+                font-size: 1.25rem;
+                font-weight: 700;
+                margin-bottom: 0.75rem;
+                line-height: 1.3;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .guide-card-desc {
+                font-size: 0.95rem;
+                color: var(--text-secondary);
+                margin-bottom: 1.5rem;
+                line-height: 1.5;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                flex: 1;
+            }
+            .guide-card-btn {
+                font-weight: 700;
+                color: var(--brand-red);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+            .guide-card-btn::after {
+                content: '→';
+                transition: transform 0.2s;
+            }
+            .guide-card:hover .guide-card-btn::after {
+                transform: translateX(4px);
+            }
+
+            @media (max-width: 1024px) {
+                .guide-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+            }
+            @media (max-width: 640px) {
+                .guide-grid { grid-template-columns: 1fr; }
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const grid = document.getElementById('guide-grid');
+                if (!grid) return;
+
+                try {
+                    const response = await fetch('/assets/data/guides.json');
+                    const guides = await response.json();
+
+                    grid.innerHTML = guides.map(guide => `
+                        <a href="/guide.html?id=${guide.id}" class="guide-card">
+                            <img src="${guide.image}" alt="${guide.title}" class="guide-card-img">
+                            <div class="guide-card-content">
+                                <span class="guide-card-category">${guide.category}</span>
+                                <h3 class="guide-card-title">${guide.title}</h3>
+                                <p class="guide-card-desc">${guide.description}</p>
+                                <span class="guide-card-btn">Read Guide</span>
+                            </div>
+                        </a>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error fetching guides:', error);
+                }
+            });
+        </script>
     </main>
 
     <creator-footer></creator-footer>

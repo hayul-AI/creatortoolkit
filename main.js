@@ -7,6 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
     loadMetaScore();
 });
 
+// Segmented Control Global Toggle
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.cta-toggle-btn');
+    if (btn) {
+        const group = btn.closest('.cta-toggle-group');
+        if (group) {
+            // UI Toggle
+            group.querySelectorAll('.cta-toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Logic Sync: If the group contains hidden radio inputs, check them
+            const radio = btn.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                // Dispatch change event manually since setting .checked doesn't trigger it
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+    }
+});
+
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');

@@ -60,13 +60,19 @@
 
                         <div class="form-group" style="margin-bottom: 2rem;">
                             <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Hook Intensity</label>
-                            <div class="radio-set">
-                                <input type="radio" name="intensity" id="int-safe" value="safe">
-                                <label for="int-safe">Safe</label>
-                                <input type="radio" name="intensity" id="int-balanced" value="balanced" checked>
-                                <label for="int-balanced">Balanced</label>
-                                <input type="radio" name="intensity" id="int-aggressive" value="aggressive">
-                                <label for="int-aggressive">Aggressive</label>
+                            <div class="cta-toggle-group">
+                                <button type="button" class="cta-toggle-btn">
+                                    <input type="radio" name="intensity" id="int-safe" value="safe" style="display:none">
+                                    Safe
+                                </button>
+                                <button type="button" class="cta-toggle-btn active">
+                                    <input type="radio" name="intensity" id="int-balanced" value="balanced" checked style="display:none">
+                                    Balanced
+                                </button>
+                                <button type="button" class="cta-toggle-btn">
+                                    <input type="radio" name="intensity" id="int-aggressive" value="aggressive" style="display:none">
+                                    Aggressive
+                                </button>
                             </div>
                         </div>
 

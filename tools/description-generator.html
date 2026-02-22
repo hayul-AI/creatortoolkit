@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Description Generator - CreatorToolkit</title>
     <meta name="description" content="Generate SEO-optimized YouTube descriptions instantly using our local template engine. Perfect for ranking and CTR.">
-    <link rel="stylesheet" href="/style.css?v=20260222">
+    <link rel="stylesheet" href="/style.css?v=20260222_v2">
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,11 +17,6 @@
         .char-counter { font-size: 0.75rem; font-weight: 700; color: var(--brand-red); background: var(--brand-red-soft); padding: 4px 10px; border-radius: 100px; }
         .hashtag-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
         .hashtag-pill { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
-        
-        .radio-group { display: flex; gap: 8px; margin-top: 0.5rem; }
-        .radio-group label { flex: 1; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .radio-group input { display: none; }
-        .radio-group input:checked + label { background: var(--brand-red); border-color: var(--brand-red); color: white; }
 
         @media (max-width: 1024px) { .desc-gen-grid { grid-template-columns: 1fr; } }
     </style>
@@ -59,13 +54,19 @@
 
                     <div class="form-group" style="margin-bottom: 2rem;">
                         <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">CTA Style</label>
-                        <div class="radio-group">
-                            <input type="radio" name="cta" id="cta-soft" value="soft" checked>
-                            <label for="cta-soft">Soft</label>
-                            <input type="radio" name="cta" id="cta-std" value="standard">
-                            <label for="cta-std">Standard</label>
-                            <input type="radio" name="cta" id="cta-strong" value="strong">
-                            <label for="cta-strong">Strong</label>
+                        <div class="cta-toggle-group">
+                            <button type="button" class="cta-toggle-btn active">
+                                <input type="radio" name="cta" id="cta-soft" value="soft" checked style="display:none">
+                                Soft
+                            </button>
+                            <button type="button" class="cta-toggle-btn">
+                                <input type="radio" name="cta" id="cta-std" value="standard" style="display:none">
+                                Standard
+                            </button>
+                            <button type="button" class="cta-toggle-btn">
+                                <input type="radio" name="cta" id="cta-strong" value="strong" style="display:none">
+                                Strong
+                            </button>
                         </div>
                     </div>
 
@@ -122,7 +123,11 @@
             const savedCta = localStorage.getItem(STORAGE_KEYS.cta);
             if (savedCta) {
                 const ctaEl = document.querySelector(`input[name="cta"][value="${savedCta}"]`);
-                if (ctaEl) ctaEl.checked = true;
+                if (ctaEl) {
+                    ctaEl.checked = true;
+                    document.querySelectorAll('.cta-toggle-btn').forEach(b => b.classList.remove('active'));
+                    ctaEl.closest('.cta-toggle-btn').classList.add('active');
+                }
             }
             updateCounter();
         });
@@ -143,17 +148,17 @@
 
         function buildDescription({videoType, title, ctaStyle}){
             const terms = extractTitleTerms(title);
-            const main = terms[0] || "tips";
-            const secondary = terms[1] || "guide";
+            const mainTerm = terms[0] || "tips";
+            const secondaryTerm = terms[1] || "guide";
 
             const openers = {
-                "Entertainment": `In this video, we dive into ${main} with a fresh, entertaining angle — built to keep you watching to the end.`,
-                "Education / Knowledge": `This video breaks down ${main} in a clear, step-by-step way so you can learn faster and remember more.`,
-                "Tech / How-To": `Follow this practical ${secondary} to improve ${main} with simple, repeatable steps you can apply right away.`,
-                "Gaming": `Today we cover ${main} with gameplay-focused tips, smart strategies, and moments you don’t want to miss.`,
-                "Music": `Immerse yourself in ${main} — crafted for listening, focus, and vibe. Perfect for study, work, or late-night sessions.`,
-                "Lifestyle / Hobby": `If you’re into ${main}, this is for you — easy ideas, small upgrades, and a realistic approach that fits daily life.`,
-                "Commentary / Opinion": `Here’s my take on ${main} — what matters, what doesn’t, and the key points people often overlook.`
+                "Entertainment": `In this video, we dive into ${mainTerm} with a fresh, entertaining angle — built to keep you watching to the end.`,
+                "Education / Knowledge": `This video breaks down ${mainTerm} in a clear, step-by-step way so you can learn faster and remember more.`,
+                "Tech / How-To": `Follow this practical ${secondaryTerm} to improve ${mainTerm} with simple, repeatable steps you can apply right away.`,
+                "Gaming": `Today we cover ${mainTerm} with gameplay-focused tips, smart strategies, and moments you don’t want to miss.`,
+                "Music": `Immerse yourself in ${mainTerm} — crafted for listening, focus, and vibe. Perfect for study, work, or late-night sessions.`,
+                "Lifestyle / Hobby": `If you’re into ${mainTerm}, this is for you — easy ideas, small upgrades, and a realistic approach that fits daily life.`,
+                "Commentary / Opinion": `Here’s my take on ${mainTerm} — what matters, what doesn’t, and the key points people often overlook.`
             };
 
             const opener = openers[videoType] || openers["Education / Knowledge"];

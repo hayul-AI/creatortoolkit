@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ctr-basics",
+    "category": "CTR",
+    "title": "How to Increase YouTube CTR Without Clickbait",
+    "description": "Learn how titles and thumbnails actually affect impressions and clicks in the 2026 algorithm.",
+    "image": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>The Science of the Click</h2><p>Click-Through Rate (CTR) is one of the most misunderstood metrics on YouTube. Many creators believe that CTR is simply about having a 'shocking' thumbnail, but in 2026, the algorithm has evolved to recognize and penalize low-quality clickbait that leads to poor retention.</p><h2>The Curiosity Gap</h2><p>Instead of clickbait, focus on the 'Curiosity Gap'. This is the space between what a viewer knows and what they want to know. Your title and thumbnail should work together to pose a question that only your video can answer. Avoid red arrows and circle-jerking unless they actually add context to the story.</p><h2>Visual Hierarchy</h2><p>Your thumbnail needs a clear focal point. Use high-contrast colors and ensure any text is readable even on small mobile screens. Limit text to 3-4 words max. Remember, the thumbnail stops the scroll, but the title earns the click.</p>"
+  },
+  {
+    "id": "retention-secrets",
+    "category": "Retention",
+    "title": "The First 30 Seconds: Hooking Your Audience",
+    "description": "Retention is the king of growth. Discover how to keep viewers watching until the very end.",
+    "image": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>The Hook is Everything</h2><p>YouTube's analytics show that the majority of viewers who leave a video do so in the first 30 seconds. This 'cliff' in your retention graph is where viral potential goes to die. To fix this, you need a hook that delivers on the promise of your thumbnail immediately.</p><h2>Visual Pacing</h2><p>In 2026, attention spans are shorter than ever. You don't need 'MrBeast-style' editing, but you do need visual variety. Change camera angles, add B-roll, or use on-screen graphics every 10-15 seconds to re-engage the viewer's brain.</p><h2>The Open Loop</h2><p>Start your video by opening a 'loop'—a specific problem or story that won't be resolved until later in the video. This creates psychological tension that keeps the viewer invested in reaching the conclusion.</p>"
+  },
+  {
+    "id": "algorithm-2026",
+    "category": "Algorithm",
+    "title": "YouTube Algorithm Update 2026: What Changed?",
+    "description": "Deep dive into the latest changes in the recommendation engine and how to optimize for it.",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>From Keywords to Context</h2><p>The 2026 YouTube algorithm has almost entirely moved away from traditional metadata like tags and descriptions. Instead, it uses advanced AI to analyze the actual video content, spoken words, and viewer behavior patterns to determine 'contextual fit'.</p><h2>Satisfaction Metrics</h2><p>YouTube now prioritizes 'Satisfaction' over 'Watch Time'. This is measured through post-video surveys and long-term returning viewer rates. If you provide genuine value, the algorithm will reward you with broader reach even if your average view duration is slightly lower.</p><h2>The Niche Authority</h2><p>Consistency within a specific niche is more important than ever. The recommendation engine builds a 'profile' of your channel. Drastic shifts in content type can confuse the system, leading to a temporary drop in impressions as it re-learns who your target audience is.</p>"
+  }
+]
