@@ -39,15 +39,15 @@
             <div class="generator-container">
                 <!-- Control Panel -->
                 <div class="input-card">
-                    <form id="generator-form" onsubmit="handleGenerate(event)">
+                    <form id="generator-form">
                         <div class="form-group" style="margin-bottom: 1.5rem;">
                             <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video Topic</label>
-                            <input type="text" id="topic-input" placeholder="e.g. Lo-fi study music, beginner guitar" style="width: 100%;">
+                            <input type="text" id="videoTopic" placeholder="e.g. Lo-fi study music, beginner guitar" style="width: 100%;">
                         </div>
 
                         <div class="form-group" style="margin-bottom: 1.5rem;">
                             <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video Style</label>
-                            <select id="style-select" style="width: 100%;">
+                            <select id="videoStyle" style="width: 100%;">
                                 <option value="Entertainment">Entertainment</option>
                                 <option value="Education / Knowledge">Education / Knowledge</option>
                                 <option value="Tech / How-To">Tech / How-To</option>
@@ -70,12 +70,24 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-primary" style="width: 100%; height: 52px; font-size: 1rem; margin: 0;">Generate Ideas 🚀</button>
+                        <button type="button" id="generateBtn" class="btn-primary" style="width: 100%; height: 52px; font-size: 1rem; margin: 0;">Generate Ideas 🚀</button>
                     </form>
                 </div>
 
                 <!-- Results Area -->
                 <div id="ai-results-root">
+                    <div id="status-panel" style="display:none;" class="ai-panel">
+                        <div class="ai-header">
+                            <h3 style="margin:0;">Suggestions</h3>
+                            <span id="statusBadge" class="ai-status">Ready</span>
+                        </div>
+                        <div class="ai-gauge-container progress-bar">
+                            <div id="progressFill" class="ai-gauge-fill progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div id="titleResults" class="results-container"></div>
+
                     <div id="ai-assistant-placeholder" style="text-align: center; padding: 5rem 0; color: var(--text-secondary); opacity: 0.5;">
                         <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🤖</span>
                         <h3>Ready to optimize your content</h3>
@@ -89,83 +101,119 @@
 
     <creator-footer></creator-footer>
 
-    <script src="/assets/js/aiEngine.js?v=20260221"></script>
     <script src="/main.js?v=20260221"></script>
     <script>
-        function handleGenerate(event) {
-            if (event) event.preventDefault();
-            
-            const topic = document.getElementById('topic-input').value.trim();
-            if (!topic) {
-                document.getElementById('topic-input').focus();
-                return;
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            const generateBtn = document.getElementById('generateBtn');
+            const videoTopic = document.getElementById('videoTopic');
+            const videoStyle = document.getElementById('videoStyle');
+            const titleResults = document.getElementById('titleResults');
+            const statusBadge = document.getElementById('statusBadge');
+            const progressFill = document.getElementById('progressFill');
+            const placeholder = document.getElementById('ai-assistant-placeholder');
+            const statusPanel = document.getElementById('status-panel');
+            const form = document.getElementById('generator-form');
 
-            const root = document.getElementById('ai-results-root');
-            root.innerHTML = `
-                <div class="ai-panel">
-                    <div class="ai-header">
-                        <h3 style="margin:0;">Suggestions</h3>
-                        <span class="ai-status analyzing">Analyzing topic...</span>
-                    </div>
-                    <div class="ai-gauge-container"><div class="ai-gauge-fill" id="ai-main-gauge"></div></div>
-                    <ul id="ai-tips-summary" style="margin:0; padding:0; list-style:none; display:none;"></ul>
-                </div>
-                <div id="titleResults" class="results-container"></div>
-            `;
+            if (form) form.addEventListener('submit', (e) => e.preventDefault());
 
-            const progressBar = document.getElementById('ai-main-gauge');
-            const statusBadge = document.querySelector('.ai-status');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', () => {
+                    const topic = videoTopic.value.trim();
+                    if (!topic) {
+                        videoTopic.focus();
+                        return;
+                    }
 
-            // Local simulation delay
-            setTimeout(() => {
-                const style = document.getElementById('style-select').value;
-                const intensity = document.querySelector('input[name="intensity"]:checked').value;
-                
-                const titles = aiEngine.generateTitles(topic, style, intensity, 10);
-                const bestTitle = titles[0];
-                const score = aiEngine.scoreTitle(bestTitle, topic);
-                const tips = aiEngine.getTips(bestTitle, score);
+                    const style = videoStyle.value;
+                    const intensity = document.querySelector('input[name="intensity"]:checked')?.value || 'balanced';
 
-                // Update Panel
-                statusBadge.className = 'ai-status ready';
-                statusBadge.innerText = 'Done';
-                progressBar.style.width = `${score}%`;
-                
-                const tipsList = document.getElementById('ai-tips-summary');
-                tipsList.style.display = 'block';
-                tipsList.innerHTML = tips.map(t => `<li style="margin-bottom:8px; font-size:0.9rem; color:var(--text-secondary);">• ${t}</li>`).join('');
+                    // Reset and Show UI
+                    if (placeholder) placeholder.style.display = 'none';
+                    if (statusPanel) statusPanel.style.display = 'block';
+                    if (titleResults) titleResults.innerHTML = '';
+                    
+                    statusBadge.innerText = 'Analyzing topic...';
+                    statusBadge.className = 'ai-status analyzing';
+                    progressFill.style.width = '30%';
 
-                // Render Results
-                const list = document.getElementById('titleResults');
-                titles.forEach((t, i) => {
-                    const cardScore = aiEngine.scoreTitle(t, topic);
-                    const card = document.createElement('div');
-                    card.className = 'result-card-ai fade-in-up';
-                    card.style.animationDelay = `${i * 0.05}s`;
-                    card.innerHTML = `
-                        <div class="title-info">
-                            <div style="font-weight:700; margin-bottom:6px;">${t}</div>
-                            <span class="seo-badge">Score: ${cardScore}/100</span>
-                        </div>
-                        <button class="btn-outline" style="height:36px; font-size:0.8rem; margin:0;" onclick="copyTitle('${t.replace(/'/g, "\\'")}', this)">Copy</button>
-                    `;
-                    list.appendChild(card);
+                    setTimeout(() => {
+                        progressFill.style.width = '100%';
+                        statusBadge.innerText = 'Done';
+                        statusBadge.className = 'ai-status ready';
+
+                        const templates = {
+                            safe: [
+                                "The Ultimate Guide to [Topic]",
+                                "How to Master [Topic] in 2026",
+                                "10 Essential Tips for [Topic]",
+                                "Everything You Need to Know About [Topic]",
+                                "The Beginner's Guide to [Topic]",
+                                "Why [Topic] is More Important Than Ever",
+                                "Top 5 [Topic] Trends You Should Follow",
+                                "How to Get Started with [Topic]",
+                                "Improving Your [Topic] Skills Today",
+                                "The Secret to Better [Topic]"
+                            ],
+                            balanced: [
+                                "I Tried [Topic] for 30 Days (My Results)",
+                                "The Truth About [Topic] Finally Revealed",
+                                "Stop Making These [Topic] Mistakes",
+                                "How I Mastered [Topic] in One Week",
+                                "7 [Topic] Hacks You Didn't Know",
+                                "Is [Topic] Actually Worth It?",
+                                "The Future of [Topic] is Changing",
+                                "[Topic] vs [Topic]: Which is Better?",
+                                "Why Most People Fail at [Topic]",
+                                "My Secret [Topic] Strategy for 2026"
+                            ],
+                            aggressive: [
+                                "DO NOT Start [Topic] Until You Watch This!",
+                                "[Topic] is DEAD. (Here's Why)",
+                                "The SCARY Truth About [Topic]",
+                                "You're Doing [Topic] WRONG (Fix It Now)",
+                                "Watch This BEFORE You [Topic]",
+                                "The Most Dangerous [Topic] Mistake You're Making",
+                                "I Regret [Topic]...",
+                                "Why You're Failing at [Topic] (And How to Fix It)",
+                                "The 1% Secret to [Topic] Success",
+                                "How [Topic] Changed My Life Forever"
+                            ]
+                        };
+
+                        const selectedTemplates = templates[intensity] || templates.balanced;
+                        
+                        selectedTemplates.forEach((tpl, i) => {
+                            const title = tpl.replace(/\[Topic\]/g, topic);
+                            const score = Math.floor(Math.random() * 15) + 84; 
+                            
+                            const card = document.createElement('div');
+                            card.className = 'result-card-ai fade-in-up';
+                            card.style.animationDelay = `${i * 0.05}s`;
+                            card.innerHTML = `
+                                <div class="title-info">
+                                    <div style="font-weight:700; margin-bottom:6px;">${title}</div>
+                                    <span class="seo-badge" style="font-size: 0.75rem; color: var(--text-secondary);">Score: ${score}/100</span>
+                                </div>
+                                <button class="btn-outline" style="height:36px; font-size:0.8rem; margin:0;" onclick="copyToClipboard('${title.replace(/'/g, "\\'")}', this)">Copy</button>
+                            `;
+                            titleResults.appendChild(card);
+                        });
+                    }, 200);
                 });
-            }, 300);
-        }
+            }
+        });
 
-        function copyTitle(text, btn) {
+        function copyToClipboard(text, btn) {
             navigator.clipboard.writeText(text).then(() => {
-                const original = btn.innerText;
-                btn.innerText = 'Saved!';
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
                 const toast = document.getElementById('copy-toast');
-                toast.style.display = 'block';
-                setTimeout(() => { 
-                    btn.innerText = original; 
-                    toast.style.display = 'none'; 
-                }, 2000);
-            });
+                if (toast) {
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+                }
+                setTimeout(() => { btn.innerText = originalText; }, 2000);
+            }).catch(() => {});
         }
     </script>
 </body>
