@@ -688,7 +688,6 @@ main input[type="range"]{
 .metascore-float, 
 #metascorePanel, 
 #ctk-metascore-container, 
-#upload-assistant-panel,
 #upload-assistant-panel {
   position: fixed !important;
   z-index: 2147483647 !important; /* Maximum possible z-index */
@@ -698,17 +697,22 @@ main input[type="range"]{
   display: flex !important;
   flex-direction: column !important;
   
-  /* Reset height/overflow to prevent clipping */
+  /* Positioning and height */
+  top: 80px !important; 
+  bottom: auto !important;
   height: auto !important;
-  max-height: calc(100vh - 100px) !important;
+  max-height: calc(100vh - 120px) !important;
+  
+  /* Reset outer container to allow shadow overflow */
   overflow: visible !important; 
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   padding: 0 !important;
   margin: 0 !important;
-  top: 80px !important; /* Fixed position from top */
-  bottom: auto !important;
 }
 
-/* The actual card container */
+/* The actual floating card */
 .metascore-float .metascore-inner,
 #metascorePanel,
 #ctk-metascore-container,
@@ -716,32 +720,39 @@ main input[type="range"]{
   background: var(--bg-primary) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 20px !important;
-  /* Natural multi-layered shadow for inspector feel */
+  /* Professional multi-layered shadow for inspector feel */
   box-shadow: 
     0 0 0 1px rgba(0,0,0,0.05),
-    0 10px 25px -5px rgba(0, 0, 0, 0.1), 
-    0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    0 10px 30px -10px rgba(0, 0, 0, 0.15), 
+    0 20px 40px -15px rgba(0, 0, 0, 0.2) !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow: hidden !important; /* Content clip */
+  overflow: hidden !important; /* Content clip for rounded corners */
   height: auto !important;
-  max-height: inherit !important;
+  max-height: 100% !important;
 }
 
-/* Body scroll area */
+/* Ensure body scroll area fills space and scrolls */
 .up-body, .ms-body {
-  flex: 1 !important;
+  flex: 1 1 auto !important;
   overflow-y: auto !important;
   padding: 20px !important;
   min-height: 150px;
 }
 
-/* Header fix */
+/* Header fix - ensure it stays at top */
 .up-header, .ms-header {
-  flex-shrink: 0 !important;
+  flex: 0 0 auto !important;
   border-bottom: 1px solid var(--border-color) !important;
   background: var(--bg-primary) !important;
   z-index: 10 !important;
+}
+
+/* Footer fix - ensure it stays at bottom */
+.up-footer {
+  flex: 0 0 auto !important;
+  border-top: 1px solid var(--border-color) !important;
+  background: var(--bg-primary) !important;
 }
 
 @media (max-width: 980px) {
@@ -754,7 +765,7 @@ main input[type="range"]{
     right: 16px !important;
     left: 16px !important;
     width: auto !important;
-    max-height: 50vh !important;
+    max-height: 60vh !important;
   }
 }
 
