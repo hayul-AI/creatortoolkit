@@ -17,10 +17,13 @@
         .keyword-pill-container { display: flex; flex-wrap: wrap; gap: 8px; min-height: 80px; padding: 12px; border: 1px dashed var(--border-color); border-radius: 12px; margin-bottom: 1.5rem; }
         .keyword-pill { background: var(--brand-red-soft); color: var(--brand-red); padding: 6px 14px; border-radius: 100px; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
         .suggestion-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
-        .comp-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; margin-left: 8px; }
-        .comp-low { background: #dcfce7; color: #166534; }
-        .comp-medium { background: #fef3c7; color: #92400e; }
-        .comp-high { background: #fee2e2; color: #991b1b; }
+        .kw-comp { font-size: 0.65rem; font-weight: 800; padding: 2px 10px; border-radius: 6px; text-transform: uppercase; }
+        .kw-comp--low { background: #dcfce7; color: #166534; }
+        .kw-comp--mid { background: #fef3c7; color: #92400e; }
+        .kw-comp--high { background: #fee2e2; color: #991b1b; }
+        .dark .kw-comp--low { background: rgba(22, 101, 52, 0.2); color: #4ade80; }
+        .dark .kw-comp--mid { background: rgba(146, 64, 14, 0.2); color: #fbbf24; }
+        .dark .kw-comp--high { background: rgba(153, 27, 27, 0.2); color: #f87171; }
         @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -102,11 +105,23 @@
                     const item = document.createElement('div');
                     item.className = 'result-card-ai fade-in-up';
                     item.style.animationDelay = `${i * 0.05}s`;
+
+                    // Normalize competition to buckets: Low, Medium, High
+                    const raw = (m.comp || '').toString().toLowerCase();
+                    let display = 'Medium', bucket = 'mid';
+                    
+                    if (['low', '0'].includes(raw) || (parseInt(raw) >= 0 && parseInt(raw) <= 33)) {
+                        display = 'Low'; bucket = 'low';
+                    } else if (['high', '100'].includes(raw) || (parseInt(raw) >= 67 && parseInt(raw) <= 100)) {
+                        display = 'High'; bucket = 'high';
+                    } else {
+                        display = 'Medium'; bucket = 'mid';
+                    }
+
                     item.innerHTML = `
-                        <div style="display:flex; align-items:center;">
-                            <span class="intent-badge intent-${m.intent}">${m.intent}</span>
-                            <span style="font-weight:600;">${m.t}</span>
-                            <span class="comp-badge comp-${m.comp.toLowerCase()}">COMP: ${m.comp}</span>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <span class="kw-text" style="font-weight:600;">${m.t}</span>
+                            <span class="kw-comp kw-comp--${bucket}">${display}</span>
                         </div>
                         <button class="btn-add" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:6px 12px; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer;" onclick="addKeyword('${m.t}')">+ Add</button>
                     `;
