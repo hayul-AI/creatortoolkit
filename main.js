@@ -5,7 +5,150 @@ document.addEventListener('DOMContentLoaded', () => {
     injectBottomNav();
     detectHomePage();
     loadMetaScore();
+    
+    // Initialize Tool-Specific logic if on those pages
+    if (document.getElementById('countryList')) {
+        initCountrySuggestions();
+    }
+    if (document.getElementById('calculateBtn')) {
+        initEarningsCalculator();
+    }
 });
+
+// Shared Country List
+window.MONETIZATION_COUNTRIES = [
+    "Global", "Algeria", "American Samoa", "Argentina", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahrain", "Bangladesh", "Belarus", "Belgium", "Bermuda", "Bolivia", "Bosnia and Herzegovina", "Brazil", "Bulgaria", "Cambodia", "Canada", "Cayman Islands", "Chile", "Colombia", "Costa Rica", "Croatia", "Cyprus", "Czechia", "Denmark", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Estonia", "Finland", "France", "French Guiana", "French Polynesia", "Georgia", "Germany", "Ghana", "Greece", "Guadeloupe", "Guam", "Guatemala", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Laos", "Latvia", "Lebanon", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Malaysia", "Malta", "Martinique", "Mayotte", "Mexico", "Montenegro", "Morocco", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Nigeria", "North Macedonia", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Saudi Arabia", "Senegal", "Serbia", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sweden", "Switzerland", "Taiwan", "Tanzania", "Thailand", "Tunisia", "Turkey", "Turks and Caicos Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Virgin Islands", "Uruguay", "Venezuela", "Vietnam", "Yemen", "Zimbabwe"
+];
+
+function initCountrySuggestions() {
+    const listEl = document.getElementById('countryList');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    window.MONETIZATION_COUNTRIES.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country;
+        listEl.appendChild(option);
+    });
+}
+
+// Earnings Calculator Logic
+function initEarningsCalculator() {
+    const calcBtn = document.getElementById('calculateBtn');
+    if (calcBtn) {
+        calcBtn.onclick = calculateEarnings;
+    }
+}
+
+const RPM_TABLE = {
+    "Global": 2.50,
+    "United States": 6.80,
+    "United Kingdom": 5.80,
+    "Canada": 5.20,
+    "Australia": 5.20,
+    "Germany": 4.80,
+    "France": 4.20,
+    "Japan": 4.20,
+    "South Korea": 3.80,
+    "India": 1.40,
+    "Brazil": 2.10,
+    "Mexico": 1.70,
+    "Pakistan": 0.80,
+    "Switzerland": 6.50,
+    "Netherlands": 4.80,
+    "Sweden": 4.80,
+    "Norway": 5.50,
+    "United Arab Emirates": 4.50,
+    "Saudi Arabia": 3.50,
+    "South Africa": 1.80,
+    "Nigeria": 0.70,
+    "Vietnam": 0.90,
+    "Philippines": 1.20,
+    "Indonesia": 1.10
+};
+
+function calculateEarnings() {
+    const errorEl = document.getElementById('calc-error');
+    if (errorEl) errorEl.style.display = 'none';
+
+    const type = document.querySelector('input[name="video-type"]:checked').value;
+    const country = document.getElementById('country-input').value.trim();
+    const views = Number(document.getElementById('views-input').value);
+    const avdM = Number(document.getElementById('avdMinutes').value);
+    const avdS = Number(document.getElementById('avdSeconds').value);
+    const retention = Number(document.getElementById('retention-input').value);
+    const niche = document.getElementById('adSuitability').value;
+    
+    if (!country) {
+        showCalcError("Please select or enter a viewer country.");
+        return;
+    }
+    if (!views || views <= 0) {
+        showCalcError("Please enter a valid number of views.");
+        return;
+    }
+
+    let baseRpm = RPM_TABLE[country] || RPM_TABLE["Global"];
+    let isFallback = !RPM_TABLE[country] && country.toLowerCase() !== "global";
+
+    if (type === 'shorts') {
+        baseRpm = 0.045; // Fixed range for Shorts
+    } else {
+        const nicheMulti = {
+            "Tech / How-To": 1.35,
+            "Education / Knowledge": 1.25,
+            "Entertainment": 1.0,
+            "Gaming": 0.85,
+            "Music": 0.9,
+            "Lifestyle / Hobby": 1.15,
+            "Commentary / Opinion": 1.0
+        };
+        baseRpm *= (nicheMulti[niche] || 1.0);
+
+        if (retention > 50) baseRpm *= 1.12;
+        if (retention < 30) baseRpm *= 0.88;
+
+        const totalAvd = avdM * 60 + avdS;
+        if (totalAvd >= 480) baseRpm *= 1.25; // Mid-roll bonus
+    }
+
+    const typical = (views / 1000) * baseRpm;
+    const low = typical * 0.72;
+    const high = typical * 1.38;
+
+    document.getElementById('typical-total').textContent = '$' + typical.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('low-total').textContent = '$' + Math.round(low).toLocaleString();
+    document.getElementById('mid-total').textContent = '$' + Math.round(typical).toLocaleString();
+    document.getElementById('high-total').textContent = '$' + Math.round(high).toLocaleString();
+
+    document.getElementById('low-rpm').textContent = 'RPM: $' + (baseRpm * 0.72).toFixed(2);
+    document.getElementById('mid-rpm').textContent = 'RPM: $' + baseRpm.toFixed(2);
+    document.getElementById('high-rpm').textContent = 'RPM: $' + (baseRpm * 1.38).toFixed(2);
+
+    const rangeNote = document.getElementById('video-range');
+    rangeNote.textContent = isFallback ? `Estimate for "${country}" (Global Average used)` : `Revenue estimate based on ${country} trends`;
+    
+    const resultArea = document.getElementById('result-area');
+    resultArea.style.display = 'block';
+    setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function showCalcError(msg) {
+    const err = document.getElementById('calc-error');
+    if (err) {
+        err.textContent = '⚠️ ' + msg;
+        err.style.display = 'block';
+    }
+}
+
+window.toggleAccordion = function() {
+    const content = document.getElementById('acc-content');
+    if (content) {
+        const isHidden = content.style.display === 'none' || content.style.display === '';
+        content.style.display = isHidden ? 'block' : 'none';
+    }
+};
+
+window.calculateEarnings = calculateEarnings;
 
 // Segmented Control Global Toggle
 document.addEventListener('click', (e) => {

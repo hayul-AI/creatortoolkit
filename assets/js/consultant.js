@@ -9,24 +9,13 @@
   const countryEl = $("country");
   const btnEl = $("consultBtn");
 
-  // Country Tag Logic
-  const monetizationCountries = [
-    "Global", "Algeria", "American Samoa", "Argentina", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahrain", "Bangladesh", "Belarus", "Belgium", "Bermuda", "Bolivia", "Bosnia and Herzegovina", "Brazil", "Bulgaria", "Cambodia", "Canada", "Cayman Islands", "Chile", "Colombia", "Costa Rica", "Croatia", "Cyprus", "Czechia", "Denmark", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Estonia", "Finland", "France", "French Guiana", "French Polynesia", "Georgia", "Germany", "Ghana", "Greece", "Guadeloupe", "Guam", "Guatemala", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Laos", "Latvia", "Lebanon", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Malaysia", "Malta", "Martinique", "Mayotte", "Mexico", "Montenegro", "Morocco", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Nigeria", "North Macedonia", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Saudi Arabia", "Senegal", "Serbia", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sweden", "Switzerland", "Taiwan", "Tanzania", "Thailand", "Tunisia", "Turkey", "Turks and Caicos Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Virgin Islands", "Uruguay", "Venezuela", "Vietnam", "Yemen", "Zimbabwe"
-  ];
+  // Country Tag Logic using global MONETIZATION_COUNTRIES
+  const monetizationCountries = window.MONETIZATION_COUNTRIES || ["Global"];
 
   let selectedCountries = ["Global"];
   const countryInput = $("countryInput");
   const addBtn = $("addCountryBtn");
   const tagContainer = $("tagContainer");
-  const listEl = $("countryList");
-
-  if (listEl) {
-    monetizationCountries.forEach(c => {
-      const opt = document.createElement("option");
-      opt.value = c;
-      listEl.appendChild(opt);
-    });
-  }
 
   function updateTags() {
     if (!tagContainer || !countryEl) return;
@@ -55,6 +44,10 @@
     let val = countryInput.value.trim();
     if (!val) return;
     
+    // Basic normalization: if it's in our list, use the exact name from list
+    const found = monetizationCountries.find(c => c.toLowerCase() === val.toLowerCase());
+    if (found) val = found;
+
     const existingIdx = selectedCountries.findIndex(c => c.toLowerCase() === val.toLowerCase());
     if (existingIdx !== -1) {
       countryInput.value = "";
