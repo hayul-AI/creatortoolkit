@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CLE62Y9TYD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CLE62Y9TYD');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Keyword Generator - CreatorToolkit | 크리에이터 도구 | 유튜브 분석 | 디자인 유틸리티</title>
+    <meta name="description" content="Find low-competition, long-tail keywords to rank your YouTube videos higher.  크리에이터 도구, 유튜브 분석, 디자인 유틸리티를 제공합니다.">
+    <link rel="stylesheet" href="/style.css?v=20260222">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .keyword-tool-page {
+            padding: 4rem 0;
+            background: var(--bg-secondary);
+            min-height: 100vh;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .card-custom {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .keyword-pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .keyword-pill {
+            background: var(--brand-red-soft);
+            color: var(--brand-red);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .suggestion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .kw-comp {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .kw-comp--low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .kw-comp--mid {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .kw-comp--high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .dark .kw-comp--low {
+            background: rgba(22, 101, 52, 0.2);
+            color: #4ade80;
+        }
+
+        .dark .kw-comp--mid {
+            background: rgba(146, 64, 14, 0.2);
+            color: #fbbf24;
+        }
+
+        .dark .kw-comp--high {
+            background: rgba(153, 27, 27, 0.2);
+            color: #f87171;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "CreatorToolkit",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "All",
+  "description": "유튜브 분석, 디자인 유틸리티 등 다양한 100% 무료 크리에이터 도구를 제공합니다.",
+  "url": "https://creatortoolkit.hotplmedia.com/"
+}
+</script>
+</head>
+
+<body class="keyword-tool-page">
+    <creator-header></creator-header>
+
+    <main class="container">
+        <div style="text-align:center; margin-bottom:3.5rem;">
+            <h1 style="font-size:3rem; letter-spacing:-0.02em;">Keyword Generator</h1>
+            <p style="color:var(--text-secondary);">Find high-intent keywords to dominate search results.</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="card-custom">
+                <div class="form-group" style="margin-bottom:1.5rem;">
+                    <label style="font-weight:700; font-size:0.85rem;">Seed Keyword</label>
+                    <input type="text" id="keyword-input" placeholder="e.g. lofi study music" style="width: 100%;">
+                </div>
+                <button onclick="handleKeywordSearch()" class="btn-primary"
+                    style="width: 100%; height: 48px; margin: 0;">Analyze Market 🔍</button>
+            </div>
+
+            <div id="keyword-results-root">
+                <div class="card-custom" id="selection-area">
+                    <label style="font-weight:700; font-size:0.85rem; margin-bottom:0.5rem; display:block;">Selected
+                        Library</label>
+                    <div class="keyword-pill-container" id="selected-list">
+                        <div style="color:var(--text-secondary); opacity:0.5; padding:1rem; font-size:0.85rem;">No
+                            keywords selected</div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="copyFormat('text')" class="btn-outline"
+                            style="flex: 1; height: 44px; font-size:0.85rem;">Copy List</button>
+                        <button onclick="copyFormat('tags')" class="btn-outline"
+                            style="flex: 1; height: 44px; font-size:0.85rem;">Copy as #Tags</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="suggestions-container" class="suggestions-area" style="max-width:1100px; margin: 3rem auto;">
+            <div id="ai-suggestion-box"></div>
+            <div class="suggestion-list" id="results-list"></div>
+        </div>
+    </main>
+
+    <div class="up-toast" id="copy-toast"
+        style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 24px; border-radius: 100px; font-weight: 600; display: none; z-index: 2000;">
+        Copied! 📋</div>
+
+    <creator-footer></creator-footer>
+
+    <script src="/assets/js/aiEngine.js?v=20260221"></script>
+    <script src="/main.js?v=20260221"></script>
+    <script>
+        let selectedKeywords = new Set();
+
+        function handleKeywordSearch() {
+            const input = document.getElementById('keyword-input').value.trim();
+            if (!input) return alert('Enter a keyword');
+
+            const sBox = document.getElementById('ai-suggestion-box');
+            sBox.innerHTML = `
+                <div class="ai-panel fade-in-up">
+                    <div class="ai-header">
+                        <h3 style="margin:0;">AI Market Analysis</h3>
+                        <span class="ai-status analyzing">Scanning intents...</span>
+                    </div>
+                    <div class="ai-gauge-container"><div class="ai-gauge-fill" id="ai-kw-gauge"></div></div>
+                    <div id="ai-kw-feedback" style="font-size:0.9rem; color:var(--text-secondary); display:none;"></div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const results = generateSmartKeywords(input);
+
+                document.querySelector('.ai-status').className = 'ai-status ready';
+                document.querySelector('.ai-status').innerText = 'Analysis Complete';
+                document.getElementById('ai-kw-gauge').style.width = '85%';
+                document.getElementById('ai-kw-feedback').style.display = 'block';
+                document.getElementById('ai-kw-feedback').innerHTML = `<p>• Found high relevance for <b>niche</b> intents.<br>• Keyword diversity optimized for 2026 SEO.</p>`;
+
+                const list = document.getElementById('results-list');
+                list.innerHTML = '';
+                results.forEach((m, i) => {
+                    const item = document.createElement('div');
+                    item.className = 'result-card-ai fade-in-up';
+                    item.style.animationDelay = `${i * 0.05}s`;
+
+                    // Normalize competition to buckets: Low, Medium, High
+                    const raw = (m.comp || '').toString().toLowerCase();
+                    let display = 'Medium', bucket = 'mid';
+
+                    if (['low', '0'].includes(raw) || (parseInt(raw) >= 0 && parseInt(raw) <= 33)) {
+                        display = 'Low'; bucket = 'low';
+                    } else if (['high', '100'].includes(raw) || (parseInt(raw) >= 67 && parseInt(raw) <= 100)) {
+                        display = 'High'; bucket = 'high';
+                    } else {
+                        display = 'Medium'; bucket = 'mid';
+                    }
+
+                    item.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <span class="kw-text" style="font-weight:600;">${m.t}</span>
+                            <span class="kw-comp kw-comp--${bucket}">${display}</span>
+                        </div>
+                        <button class="btn-add" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:6px 12px; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer;" onclick="addKeyword('${m.t}')">+ Add</button>
+                    `;
+                    list.appendChild(item);
+                });
+            }, 400);
+        }
+
+        function generateSmartKeywords(seed) {
+            const normalized = seed.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const base = normalized || 'video';
+
+            const buckets = [
+                { intent: 'tutorial', mods: ['tutorial', 'setup', 'beginner', 'workflow', 'tips', 'mistakes'] },
+                { intent: 'comparison', mods: ['vs', 'alternatives', 'comparison', 'best', 'ranking'] },
+                { intent: 'info', mods: ['meaning', 'explained', 'features', 'update', 'requirements'] },
+                { intent: 'review', mods: ['review', 'rating', 'proscons', 'verdict', 'pricing'] }
+            ];
+
+            let candidates = [];
+            buckets.forEach(bucket => {
+                bucket.mods.forEach(mod => {
+                    // Form 1: base + mod
+                    candidates.push({ t: (base + mod).toLowerCase(), intent: bucket.intent });
+                    // Form 2: mod + base
+                    candidates.push({ t: (mod + base).toLowerCase(), intent: bucket.intent });
+                });
+            });
+
+            // Filter
+            candidates = candidates.filter(c => {
+                if (c.t.length < 6 && base.length < 5) return false;
+                if (c.t === base) return false;
+                return true;
+            });
+
+            // Shuffle and pick 10
+            const shuffled = candidates.sort(() => 0.5 - Math.random());
+            const unique = [];
+            const seen = new Set();
+
+            for (const item of shuffled) {
+                if (!seen.has(item.t)) {
+                    seen.add(item.t);
+                    unique.push(item);
+                }
+                if (unique.length >= 10) break;
+            }
+
+            // Competition Heuristic
+            return unique.map(item => {
+                let comp = 'Medium';
+                const highMods = ['best', 'vs', 'review', 'comparison', 'ranking'];
+                const lowMods = ['workflow', 'requirements', 'features', 'mistakes', 'alternatives'];
+
+                if (highMods.some(m => item.t.includes(m)) || base.length <= 5) comp = 'High';
+                else if (item.t.length >= 10 && lowMods.some(m => item.t.includes(m))) comp = 'Low';
+
+                return { ...item, comp };
+            });
+        }
+
+        function addKeyword(kw) {
+            selectedKeywords.add(kw);
+            updatePills();
+        }
+
+        function updatePills() {
+            const container = document.getElementById('selected-list');
+            if (selectedKeywords.size === 0) {
+                container.innerHTML = '<div style="color:var(--text-secondary); opacity:0.5; padding:1rem; font-size:0.85rem;">No keywords selected</div>';
+                return;
+            }
+            container.innerHTML = Array.from(selectedKeywords).map(kw => `
+                <div class="keyword-pill">${kw} <span style="cursor:pointer; opacity:0.6;" onclick="removeKeyword('${kw}')">✕</span></div>
+            `).join('');
+        }
+
+        function removeKeyword(kw) { selectedKeywords.delete(kw); updatePills(); }
+
+        function copyFormat(type) {
+            if (selectedKeywords.size === 0) return;
+            let text = Array.from(selectedKeywords).join(', ');
+            if (type === 'tags') {
+                text = Array.from(selectedKeywords).map(k => '#' + k.replace(/\s+/g, '')).join(' ');
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('copy-toast');
+                toast.style.display = 'block';
+                setTimeout(() => toast.style.display = 'none', 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CLE62Y9TYD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CLE62Y9TYD');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Description Generator - CreatorToolkit | 크리에이터 도구 | 유튜브 분석 | 디자인 유틸리티</title>
+    <meta name="description"
+        content="Generate SEO-optimized YouTube descriptions instantly using our local template engine. Perfect for ranking and CTR.">
+    <link rel="stylesheet" href="/style.css?v=20260222_v2">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .desc-gen-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 2.5rem;
+            align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card-premium {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .char-counter {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--brand-red);
+            background: var(--brand-red-soft);
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+
+        .hashtag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .hashtag-pill {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .desc-gen-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "CreatorToolkit",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "All",
+  "description": "유튜브 분석, 디자인 유틸리티 등 다양한 100% 무료 크리에이터 도구를 제공합니다.",
+  "url": "https://creatortoolkit.hotplmedia.com/"
+}
+</script>
+</head>
+
+<body class="bg-secondary">
+    <creator-header></creator-header>
+
+    <main style="padding: 5rem 0;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h1 style="font-size: 3rem; letter-spacing: -0.02em; margin-bottom: 1rem;">Video Description Generator
+                </h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Generate
+                    SEO-friendly YouTube descriptions (~500 chars) instantly.</p>
+            </div>
+
+            <div class="desc-gen-grid">
+                <!-- Control Panel -->
+                <div class="card-premium">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label for="videoType"
+                            style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video
+                            Type</label>
+                        <select id="videoType" style="width: 100%;">
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Education / Knowledge">Education / Knowledge</option>
+                            <option value="Tech / How-To">Tech / How-To</option>
+                            <option value="Gaming">Gaming</option>
+                            <option value="Music">Music</option>
+                            <option value="Lifestyle / Hobby">Lifestyle / Hobby</option>
+                            <option value="Commentary / Opinion">Commentary / Opinion</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Video
+                            Title</label>
+                        <input type="text" id="title-input" placeholder="Paste your YouTube title here..."
+                            style="width: 100%;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">CTA
+                            Style</label>
+                        <div class="cta-toggle-group">
+                            <button type="button" class="cta-toggle-btn active">
+                                <input type="radio" name="cta" id="cta-soft" value="soft" checked style="display:none">
+                                Soft
+                            </button>
+                            <button type="button" class="cta-toggle-btn">
+                                <input type="radio" name="cta" id="cta-std" value="standard" style="display:none">
+                                Standard
+                            </button>
+                            <button type="button" class="cta-toggle-btn">
+                                <input type="radio" name="cta" id="cta-strong" value="strong" style="display:none">
+                                Strong
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="handleGenerate()" class="btn-primary"
+                        style="width: 100%; height: 52px; font-size: 1rem; margin: 0;">Generate Description ✨</button>
+                </div>
+
+                <!-- Output Panel -->
+                <div id="output-area">
+                    <div class="card-premium" style="min-height: 480px; display: flex; flex-direction: column;">
+                        <div class="output-header">
+                            <h3 style="margin:0; font-size: 1.1rem;">Generated Result</h3>
+                            <div class="char-counter" id="char-count">0 chars</div>
+                        </div>
+
+                        <textarea id="output-text"
+                            style="flex: 1; width: 100%; padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.95rem; line-height: 1.6; resize: none; background: var(--bg-secondary); font-family: inherit;"
+                            placeholder="Your description will appear here..."></textarea>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1rem;">
+                            <button onclick="copyText('output-text')" class="btn-outline"
+                                style="height: 44px; font-size: 0.9rem;">📋 Copy Description</button>
+                            <button onclick="copyAll()" class="btn-primary"
+                                style="height: 44px; font-size: 0.9rem; margin: 0;">🔥 Copy Everything</button>
+                        </div>
+
+                        <div class="hashtag-container" id="hashtag-root" style="display: none;">
+                            <div
+                                style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span
+                                    style="font-weight: 700; font-size: 0.85rem; color: var(--text-secondary);">Suggested
+                                    Hashtags</span>
+                                <button onclick="copyHashtags()" class="btn-outline"
+                                    style="height: 28px; padding: 0 10px; font-size: 0.7rem; border-radius: 6px; margin: 0;">Copy
+                                    Tags</button>
+                            </div>
+                            <div id="hashtag-list" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="up-toast" id="copy-toast"
+        style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 24px; border-radius: 100px; font-weight: 600; display: none; z-index: 2000;">
+        Copied! 📋</div>
+
+    <creator-footer></creator-footer>
+
+    <script src="/main.js?v=20260221"></script>
+    <script>
+        const STORAGE_KEYS = {
+            type: 'descgen.videoType',
+            title: 'descgen.title',
+            cta: 'descgen.cta',
+            output: 'descgen.output'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sr = (id) => document.getElementById(id);
+            const savedType = localStorage.getItem(STORAGE_KEYS.type);
+            if (savedType) sr('videoType').value = savedType;
+            sr('title-input').value = localStorage.getItem(STORAGE_KEYS.title) || '';
+            sr('output-text').value = localStorage.getItem(STORAGE_KEYS.output) || '';
+            const savedCta = localStorage.getItem(STORAGE_KEYS.cta);
+            if (savedCta) {
+                const ctaEl = document.querySelector(`input[name="cta"][value="${savedCta}"]`);
+                if (ctaEl) {
+                    ctaEl.checked = true;
+                    document.querySelectorAll('.cta-toggle-btn').forEach(b => b.classList.remove('active'));
+                    ctaEl.closest('.cta-toggle-btn').classList.add('active');
+                }
+            }
+            updateCounter();
+        });
+
+        function extractTitleTerms(title) {
+            const stop = new Set(["the", "a", "an", "and", "or", "of", "to", "in", "for", "with", "on", "at", "by", "from", "is", "are", "be", "how", "why", "what", "when", "your", "you"]);
+            const clean = title
+                .toLowerCase()
+                .replace(/[\[\](){}:;,.!?'"“”‘’]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+            const words = clean.split(" ").filter(w => w && !stop.has(w) && w.length >= 3);
+            const freq = {};
+            for (const w of words) freq[w] = (freq[w] || 0) + 1;
+            const ranked = Object.keys(freq).sort((a, b) => freq[b] - freq[a]);
+            return ranked.slice(0, 5); // top terms
+        }
+
+        function buildDescription({ videoType, title, ctaStyle }) {
+            const terms = extractTitleTerms(title);
+            const mainTerm = terms[0] || "tips";
+            const secondaryTerm = terms[1] || "guide";
+
+            const openers = {
+                "Entertainment": `In this video, we dive into ${mainTerm} with a fresh, entertaining angle — built to keep you watching to the end.`,
+                "Education / Knowledge": `This video breaks down ${mainTerm} in a clear, step-by-step way so you can learn faster and remember more.`,
+                "Tech / How-To": `Follow this practical ${secondaryTerm} to improve ${mainTerm} with simple, repeatable steps you can apply right away.`,
+                "Gaming": `Today we cover ${mainTerm} with gameplay-focused tips, smart strategies, and moments you don’t want to miss.`,
+                "Music": `Immerse yourself in ${mainTerm} — crafted for listening, focus, and vibe. Perfect for study, work, or late-night sessions.`,
+                "Lifestyle / Hobby": `If you’re into ${mainTerm}, this is for you — easy ideas, small upgrades, and a realistic approach that fits daily life.`,
+                "Commentary / Opinion": `Here’s my take on ${mainTerm} — what matters, what doesn’t, and the key points people often overlook.`
+            };
+
+            const opener = openers[videoType] || openers["Education / Knowledge"];
+
+            const titleLine = title ? `\n\n🎬 Title: ${title}` : "";
+            const seoLine = terms.length
+                ? `\n\n✅ In this episode we touch on: ${terms.slice(0, 4).join(", ")}.`
+                : "";
+
+            let ctaLine = "";
+            const style = ctaStyle.toLowerCase();
+            if (style === "soft") ctaLine = `\n\nIf this helped, consider liking the video and checking the channel for more.`;
+            if (style === "standard") ctaLine = `\n\n👍 Like, comment what you want next, and subscribe for weekly uploads.`;
+            if (style === "strong") ctaLine = `\n\n🔥 Drop a COMMENT with your question, hit LIKE, and SUBSCRIBE so you don’t miss the next one.`;
+
+            // Keep around ~500 chars by trimming gently
+            let out = `${opener}${titleLine}${seoLine}${ctaLine}`.trim();
+            if (out.length > 520) out = out.slice(0, 510).trim() + "...";
+            return out;
+        }
+
+        function buildHashtags(videoType, title) {
+            const base = extractTitleTerms(title).slice(0, 4);
+            const typeTag = videoType.toLowerCase().replace(/\s*\/\s*/g, "").replace(/\s+/g, "");
+            const tags = [...base, typeTag].filter(Boolean).slice(0, 5);
+            return tags.map(t => "#" + t.replace(/[^a-z0-9]/g, ""));
+        }
+
+        function handleGenerate() {
+            const videoType = document.getElementById('videoType').value;
+            const title = document.getElementById('title-input').value.trim();
+            const ctaStyle = document.querySelector('input[name="cta"]:checked').value;
+
+            if (!videoType || !title) return alert('Video Type and Title are required');
+
+            // Save inputs
+            localStorage.setItem(STORAGE_KEYS.type, videoType);
+            localStorage.setItem(STORAGE_KEYS.title, title);
+            localStorage.setItem(STORAGE_KEYS.cta, ctaStyle);
+
+            const desc = buildDescription({ videoType, title, ctaStyle });
+
+            document.getElementById('output-text').value = desc;
+            localStorage.setItem(STORAGE_KEYS.output, desc);
+            updateCounter();
+
+            // Render Hashtags
+            const tags = buildHashtags(videoType, title);
+            const root = document.getElementById('hashtag-root');
+            const list = document.getElementById('hashtag-list');
+            root.style.display = 'block';
+            list.innerHTML = tags.map(t => `<span class="hashtag-pill">${t}</span>`).join('');
+        }
+
+        function updateCounter() {
+            const txt = document.getElementById('output-text').value;
+            document.getElementById('char-count').innerText = `${txt.length} chars`;
+        }
+
+        function copyText(id) {
+            const val = document.getElementById(id).value;
+            if (!val) return;
+            navigator.clipboard.writeText(val).then(() => showToast());
+        }
+
+        function copyHashtags() {
+            const tags = Array.from(document.querySelectorAll('.hashtag-pill')).map(el => el.innerText).join(' ');
+            if (!tags) return;
+            navigator.clipboard.writeText(tags).then(() => showToast());
+        }
+
+        function copyAll() {
+            const desc = document.getElementById('output-text').value;
+            const tags = Array.from(document.querySelectorAll('.hashtag-pill')).map(el => el.innerText).join(' ');
+            navigator.clipboard.writeText(desc + "\n\n" + tags).then(() => showToast());
+        }
+
+        function showToast() {
+            const t = document.getElementById('copy-toast');
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+
+        document.getElementById('output-text').oninput = updateCounter;
+    </script>
+</body>
+
+</html>

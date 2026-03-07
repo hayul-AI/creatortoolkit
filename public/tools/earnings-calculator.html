@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CLE62Y9TYD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CLE62Y9TYD');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Earnings Calculator - CreatorToolkit | 크리에이터 도구 | 유튜브 분석 | 디자인 유틸리티</title>
+    <meta name="description"
+        content="Estimate your YouTube potential earnings based on country RPM, views, and watch time. Professional local earnings auditor.">
+    <link rel="stylesheet" href="/style.css?v=20260222">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 2.5rem;
+            align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .result-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .scenario-item {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .scenario-item h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .scenario-item .val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .scenario-item .rpm {
+            font-size: 0.75rem;
+            color: var(--brand-red);
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        .big-total {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--brand-red);
+            letter-spacing: -0.04em;
+            margin: 0.5rem 0;
+        }
+
+        .warning-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .radio-item input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-item label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .radio-item input:checked+label {
+            background: var(--brand-red);
+            color: white;
+            border-color: var(--brand-red);
+        }
+
+        .accordion {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .accordion-header {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .accordion-content {
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: none;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "CreatorToolkit",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "All",
+  "description": "유튜브 분석, 디자인 유틸리티 등 다양한 100% 무료 크리에이터 도구를 제공합니다.",
+  "url": "https://creatortoolkit.hotplmedia.com/"
+}
+</script>
+</head>
+
+<body>
+    <creator-header></creator-header>
+
+    <main style="padding: 5rem 0; background: var(--bg-secondary); min-height: 80vh;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h1 style="font-size: 3rem; letter-spacing: -0.02em; margin-bottom: 1rem;">YouTube Video Earnings
+                    Calculator</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Estimate
+                    your potential revenue based on global RPM trends. Note: Actual earnings depend on your niche and
+                    audience.</p>
+            </div>
+
+            <div class="calc-grid">
+                <!-- Form Area -->
+                <div class="form-card">
+                    <div class="input-group">
+                        <label class="label-premium"
+                            style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Video
+                            Content Type</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="video-type" id="type-long" value="long" checked>
+                                <label for="type-long">Long-form</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="video-type" id="type-shorts" value="shorts">
+                                <label for="type-shorts">Shorts</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1.5rem;">
+                        <label class="label-premium"
+                            style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Viewer
+                            Country</label>
+                        <input type="text" id="country-input" list="countryList" placeholder="Start typing country...">
+                        <datalist id="countryList"></datalist>
+                        <small
+                            style="color:var(--text-secondary); font-size:0.75rem; margin-top:0.25rem; display:block;">RPM
+                            varies significantly by region.</small>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1.5rem;">
+                        <label class="label-premium"
+                            style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Estimated
+                            Views</label>
+                        <input type="number" id="views-input" placeholder="e.g. 100000" step="1000">
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1.5rem;">
+                        <label class="label-premium"
+                            style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Avg. View
+                            Duration (mm:ss)</label>
+                        <div class="form-row" style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 1;">
+                                <input id="avdMinutes" type="number" min="0" inputmode="numeric" placeholder="mm"
+                                    value="3" style="width: 100%;">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <input id="avdSeconds" type="number" min="0" max="59" inputmode="numeric"
+                                    placeholder="ss" value="0" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1.5rem;">
+                        <label class="label-premium"
+                            style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Audience
+                            Retention (%)</label>
+                        <input type="range" id="retention-input" min="5" max="90" value="40"
+                            oninput="this.nextElementSibling.value = this.value + '%'">
+                        <output style="font-weight:700; color:var(--brand-red); font-size:0.9rem;">40%</output>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 2rem;">
+                        <label class="label-premium"
+                            style="display:block; margin-bottom:0.5rem; font-weight:700; font-size:0.85rem;">Ad
+                            Suitability / Niche</label>
+                        <select id="adSuitability" name="adSuitability" style="width: 100%;">
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Education / Knowledge">Education / Knowledge</option>
+                            <option value="Tech / How-To">Tech / How-To</option>
+                            <option value="Gaming">Gaming</option>
+                            <option value="Music">Music</option>
+                            <option value="Lifestyle / Hobby">Lifestyle / Hobby</option>
+                            <option value="Commentary / Opinion">Commentary / Opinion</option>
+                        </select>
+                    </div>
+
+                    <div id="calc-error"
+                        style="color: var(--brand-red); font-size: 0.85rem; margin-bottom: 1rem; display: none; font-weight: 600;">
+                    </div>
+                    <button id="calculateBtn" class="btn-primary"
+                        style="width: 100%; height: 52px; font-size: 1.1rem; margin: 0;">Calculate Potential ✨</button>
+                </div>
+
+                <!-- Result Area -->
+                <div id="result-area" class="result-card">
+                    <div class="warning-box">
+                        <span>⚠️</span>
+                        <span>Estimates are based on typical RPM ranges and do not represent actual YouTube payouts.
+                            Country list may change over time.</span>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <span
+                            style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Estimated
+                            Typical Earnings</span>
+                        <div class="big-total" id="typical-total">$0.00</div>
+                        <p id="video-range" style="font-weight: 600; color: var(--text-secondary);"></p>
+                    </div>
+
+                    <div class="scenario-grid">
+                        <div class="scenario-item">
+                            <h4>Conservative</h4>
+                            <div class="val" id="low-total">$0</div>
+                            <div class="rpm" id="low-rpm">RPM: $0</div>
+                        </div>
+                        <div class="scenario-item" style="border-color: var(--brand-red);">
+                            <h4>Typical</h4>
+                            <div class="val" id="mid-total">$0</div>
+                            <div class="rpm" id="mid-rpm">RPM: $0</div>
+                        </div>
+                        <div class="scenario-item">
+                            <h4>Optimistic</h4>
+                            <div class="val" id="high-total">$0</div>
+                            <div class="rpm" id="high-rpm">RPM: $0</div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header" onclick="toggleAccordion()">
+                            What factors affect my RPM? <span>▼</span>
+                        </div>
+                        <div class="accordion-content" id="acc-content">
+                            • <b>Viewer Location:</b> High-GDP countries (US, UK, CA) have higher ad rates.<br>
+                            • <b>Niche:</b> Finance and Business niches often pay 5-10x more than Gaming or Comedy.<br>
+                            • <b>Video Length:</b> 8+ minute videos can have mid-roll ads, increasing revenue.<br>
+                            • <b>Seasonality:</b> RPM usually peaks in Q4 (holidays) and drops in Q1.<br>
+                            • <b>Ad Inventory:</b> Whether viewers use ad-blockers or have YouTube Premium.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <creator-footer></creator-footer>
+
+    <script src="/main.js"></script>
+    <script>
