@@ -1,3 +1,10 @@
+(function() {
+    const s = document.createElement("script");
+    s.src = "/public/js/components/seo/tool-guide-sections.js";
+    s.type = "module";
+    document.head.appendChild(s);
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     setupMobileMenu();
@@ -180,7 +187,7 @@ function initTheme() {
 
 function loadMetaScore() {
     // Pages to EXCLUDE
-    const EXCLUDE = ["guides", "about", "privacy", "terms", "contact"];
+    const EXCLUDE = ["guides", "about", "privacy", "terms", "contact", "thumbnail-maker"];
     const p = (location.pathname || "").toLowerCase();
     if (EXCLUDE.some(x => p.includes(x))) return;
 
@@ -404,3 +411,26 @@ function registerWebComponents() {
     if (!customElements.get('creator-header')) customElements.define('creator-header', CreatorHeader);
     if (!customElements.get('creator-footer')) customElements.define('creator-footer', CreatorFooter);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Determine tool name based on page path
+    const path = window.location.pathname;
+    let toolName = "";
+    if (path.includes('keyword-generator')) toolName = "Keyword Generator";
+    else if (path.includes('thumbnail-maker')) toolName = "Thumbnail Maker";
+    else if (path.includes('thumbnail-phrase')) toolName = "Thumbnail Phrase Generator";
+    else if (path.includes('earnings-calculator')) toolName = "YouTube Video Earnings Calculator";
+    else if (path.includes('channel-branding-generator')) toolName = "YouTube Channel Name Generator";
+    else if (path.includes('title-generator')) toolName = "Video Title Generator";
+    else if (path.includes('description-generator')) toolName = "Video Description Generator";
+    else if (path.includes('consultant')) toolName = "YouTube Consultant";
+
+    // Only mount on specified pages
+    if (toolName && !document.querySelector("tool-guide-sections")) {
+        const toolInfo = document.createElement("tool-guide-sections");
+        toolInfo.setAttribute("tool-name", toolName);
+        const footer = document.querySelector("creator-footer, footer");
+        if (footer) footer.parentNode.insertBefore(toolInfo, footer);
+        else document.body.appendChild(toolInfo);
+    }
+});

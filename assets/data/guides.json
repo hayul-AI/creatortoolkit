@@ -22,5 +22,68 @@
     "description": "Deep dive into the latest changes in the recommendation engine and how to optimize for it.",
     "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
     "content": "<h2>From Keywords to Context</h2><p>The 2026 YouTube algorithm has almost entirely moved away from traditional metadata like tags and descriptions. Instead, it uses advanced AI to analyze the actual video content, spoken words, and viewer behavior patterns to determine 'contextual fit'.</p><h2>Satisfaction Metrics</h2><p>YouTube now prioritizes 'Satisfaction' over 'Watch Time'. This is measured through post-video surveys and long-term returning viewer rates. If you provide genuine value, the algorithm will reward you with broader reach even if your average view duration is slightly lower.</p><h2>The Niche Authority</h2><p>Consistency within a specific niche is more important than ever. The recommendation engine builds a 'profile' of your channel. Drastic shifts in content type can confuse the system, leading to a temporary drop in impressions as it re-learns who your target audience is.</p>"
+  },
+  {
+    "id": "channel-name-tips",
+    "category": "Branding",
+    "title": "Choosing the Perfect YouTube Channel Name",
+    "description": "Your channel name is your brand. Learn how to pick one that sticks and ranks.",
+    "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Branding Foundation</h2><p>Your name is the first impression. It should be memorable, searchable, and reflect your content.</p><h2>Simplicity Wins</h2><p>Keep it short (2-3 words). Avoid numbers and special characters. Consistency across social media is vital for a professional look.</p><h2>Use Tools</h2><p>Stuck? Use our Channel Name Generator to find inspiration based on your niche.</p>"
+  },
+  {
+    "id": "viral-title-secrets",
+    "category": "Growth",
+    "title": "Viral Title Secrets: Mastering the Click",
+    "description": "How to write titles that provoke curiosity and drive massive views.",
+    "image": "https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>The Headline is Half the Battle</h2><p>Titles drive clicks. Balance SEO with curiosity hooks. Keep titles under 70 characters to avoid mobile cut-off.</p><h2>Power Words</h2><p>Use words like 'Never', 'Secret', or 'Mistake' to trigger interest. Test variants to see what resonates with your audience.</p>"
+  },
+  {
+    "id": "seo-description-guide",
+    "category": "SEO",
+    "title": "The Ultimate Video Description SEO Guide",
+    "description": "Optimize your metadata to help the algorithm find your perfect audience.",
+    "image": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Algorithms Read Too</h2><p>The first two lines are critical. Include keywords and a clear hook. Use timestamps to create chapters and improve searchability.</p><h2>Engagement</h2><p>Always include a Call to Action (CTA). Guide your viewers on what to do next to build a loyal community.</p>"
+  },
+  {
+    "id": "keyword-research-2026",
+    "category": "SEO",
+    "title": "Keyword Research for 2026 YouTube SEO",
+    "description": "Find low-competition keywords that can rank your videos immediately.",
+    "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Targeted Growth</h2><p>Focus on long-tail keywords with clear search intent. Avoid broad terms that are already dominated by large channels.</p><h2>Tools and Trends</h2><p>Use our Keyword Generator to find niche-specific terms that are trending right now.</p>"
+  },
+  {
+    "id": "thumbnail-phrase-strategy",
+    "category": "CTR",
+    "title": "Thumbnail Phrase Strategy: The Split-Second Win",
+    "description": "How to choose short, punchy phrases that stop the scroll.",
+    "image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Speed Matters</h2><p>Thumbnails have 0.5 seconds to win. Use 3-4 bold words. Contrast is key—make sure your text pops against the background.</p><h2>Hooking</h2><p>The phrase should complement the title, not repeat it. Create curiosity that only the video can satisfy.</p>"
+  },  {
+    "id": "pro-thumbnail-design",
+    "category": "Design",
+    "title": "Professional Thumbnail Design Guide",
+    "description": "Design clean, high-contrast thumbnails that stand out in any feed.",
+    "image": "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Visual Hierarchy</h2><p>Largest element wins. Use faces with clear emotions to build human connection instantly.</p><h2>Clean and Bold</h2><p>Avoid clutter. Simple designs with 2-3 main colors often perform better on mobile than complex ones.</p>"
+  },
+  {
+    "id": "growth-consulting",
+    "category": "Growth",
+    "title": "YouTube Channel Growth Strategy Guide",
+    "description": "Actionable advice to scale your channel and improve your funnel.",
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Systems for Scale</h2><p>Analyze your funnel from impressions to subscribers. Identify where you're losing viewers and fix it.</p><h2>Retention and Community</h2><p>Engagement is a signal. Reply to comments and use the community tab to keep your audience invested in your journey.</p>"
+  },
+  {
+    "id": "monetization-rpm",
+    "category": "Monetization",
+    "title": "Understanding YouTube Monetization and RPM",
+    "description": "Learn how to maximize your earnings and build a sustainable business.",
+    "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800",
+    "content": "<h2>Business of Video</h2><p>RPM depends on niche and viewer location. High-GDP audiences often yield higher ad rates.</p><h2>Diversify</h2><p>Don't rely solely on AdSense. Use affiliate marketing and digital products to create a resilient income stream.</p>"
   }
 ]

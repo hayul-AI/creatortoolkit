@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thumbnail Editor - CreatorToolkit</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/assets/styles/base.css">
     <link rel="stylesheet" href="/style.css?v=20260222">
     <!-- 20+ Professional Google Fonts -->
@@ -256,3 +257,287 @@
 
     <script src="/main.js"></script>
     <script>
+        const layersRoot = document.getElementById('layers-root');
+        const bgPreview = document.getElementById('bg-preview');
+        const bgUpload = document.getElementById('bg-upload');
+        const fileName = document.getElementById('file-name');
+        const editPanel = document.getElementById('edit-panel');
+        const canvasView = document.getElementById('canvas-view');
+
+        let layers = [];
+        let selectedLayer = null;
+        let isDragging = false;
+        let isResizing = false;
+        let isRotating = false;
+        let startX, startY, startWidth, startHeight, startAngle, startLeft, startTop;
+
+        // --- Background Handling ---
+        bgUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = (f) => bgPreview.src = f.target.result;
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // --- Layer Management ---
+        function addTextLayer() {
+            const id = 'layer-' + Date.now();
+            const layer = {
+                id,
+                text: 'DOUBLE CLICK TO EDIT',
+                font: 'Anton',
+                size: 100,
+                color: '#ffffff',
+                strokeColor: '#000000',
+                strokeWidth: 8,
+                x: 100,
+                y: 100,
+                rotation: 0,
+                zIndex: layers.length + 10
+            };
+            layers.push(layer);
+            renderLayer(layer);
+            selectLayer(id);
+        }
+
+        function renderLayer(layer) {
+            const el = document.createElement('div');
+            el.id = layer.id;
+            el.className = 'text-layer';
+            el.innerHTML = `
+                <div class="rotator">↻</div>
+                <div class="layer-content">${layer.text}</div>
+                <div class="resizer nw"></div>
+                <div class="resizer ne"></div>
+                <div class="resizer sw"></div>
+                <div class="resizer se"></div>
+            `;
+            updateLayerStyle(el, layer);
+            layersRoot.appendChild(el);
+
+            // Events
+            el.addEventListener('mousedown', (e) => {
+                if (e.target.classList.contains('resizer')) startResize(e, layer, e.target.classList[1]);
+                else if (e.target.classList.contains('rotator')) startRotate(e, layer);
+                else startDrag(e, layer);
+            });
+        }
+
+        function updateLayerStyle(el, layer) {
+            el.style.left = layer.x + 'px';
+            el.style.top = layer.y + 'px';
+            el.style.zIndex = layer.zIndex;
+            el.style.transform = `rotate(${layer.rotation}deg)`;
+            
+            const content = el.querySelector('.layer-content');
+            content.style.fontFamily = layer.font;
+            content.style.fontSize = layer.size + 'px';
+            content.style.color = layer.color;
+            content.style.webkitTextStroke = `${layer.strokeWidth}px ${layer.strokeColor}`;
+            content.style.textShadow = '0 4px 15px rgba(0,0,0,0.3)';
+            content.innerText = layer.text;
+        }
+
+        function selectLayer(id) {
+            if (selectedLayer && selectedLayer.id === id) return;
+            
+            document.querySelectorAll('.text-layer').forEach(l => l.classList.remove('selected'));
+            selectedLayer = layers.find(l => l.id === id);
+            
+            if (selectedLayer) {
+                const el = document.getElementById(id);
+                el.classList.add('selected');
+                editPanel.style.display = 'block';
+                
+                // Sync UI
+                document.getElementById('input-text').value = selectedLayer.text;
+                document.getElementById('input-font').value = selectedLayer.font;
+                document.getElementById('input-size').value = selectedLayer.size;
+                document.getElementById('input-color').value = selectedLayer.color;
+                document.getElementById('input-stroke-color').value = selectedLayer.strokeColor;
+                document.getElementById('input-stroke-width').value = selectedLayer.strokeWidth;
+            } else {
+                editPanel.style.display = 'none';
+            }
+        }
+
+        // --- Editing Functions ---
+        const inputs = ['input-text', 'input-font', 'input-size', 'input-color', 'input-stroke-color', 'input-stroke-width'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                if (!selectedLayer) return;
+                const prop = id.replace('input-', '').replace('text', 'text').replace('stroke-color', 'strokeColor').replace('stroke-width', 'strokeWidth');
+                selectedLayer[prop] = e.target.value;
+                updateLayerStyle(document.getElementById(selectedLayer.id), selectedLayer);
+            });
+        });
+
+        function deleteLayer() {
+            if (!selectedLayer) return;
+            document.getElementById(selectedLayer.id).remove();
+            layers = layers.filter(l => l.id !== selectedLayer.id);
+            selectedLayer = null;
+            editPanel.style.display = 'none';
+        }
+
+        function changeZ(dir) {
+            if (!selectedLayer) return;
+            selectedLayer.zIndex += dir;
+            updateLayerStyle(document.getElementById(selectedLayer.id), selectedLayer);
+        }
+
+        // --- Interaction Logic ---
+        function startDrag(e, layer) {
+            selectLayer(layer.id);
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = layer.x;
+            startTop = layer.y;
+            e.stopPropagation();
+        }
+
+        function startResize(e, layer, handle) {
+            isResizing = true;
+            startX = e.clientX;
+            startHeight = layer.size;
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        function startRotate(e, layer) {
+            isRotating = true;
+            const rect = document.getElementById(layer.id).getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI - layer.rotation;
+            e.stopPropagation();
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging && selectedLayer) {
+                const zoom = 0.45; 
+                selectedLayer.x = startLeft + (e.clientX - startX) / zoom;
+                selectedLayer.y = startTop + (e.clientY - startY) / zoom;
+                updateLayerStyle(document.getElementById(selectedLayer.id), selectedLayer);
+            }
+            if (isResizing && selectedLayer) {
+                const diff = e.clientX - startX;
+                selectedLayer.size = Math.max(20, startHeight + diff);
+                updateLayerStyle(document.getElementById(selectedLayer.id), selectedLayer);
+                document.getElementById('input-size').value = Math.round(selectedLayer.size);
+            }
+            if (isRotating && selectedLayer) {
+                const rect = document.getElementById(selectedLayer.id).getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI;
+                selectedLayer.rotation = angle - startAngle;
+                updateLayerStyle(document.getElementById(selectedLayer.id), selectedLayer);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = isResizing = isRotating = false;
+        });
+
+        // --- Filters Logic ---
+        function applyPreset(preset) {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const filters = {
+                none: { b: 100, c: 100, s: 100, bl: 0, v: 0, g: 0 },
+                clean: { b: 105, c: 110, s: 110, bl: 0, v: 5, g: 0 },
+                warm: { b: 100, c: 100, s: 120, bl: 0, v: 10, g: 0 },
+                cool: { b: 100, c: 105, s: 90, bl: 0, v: 10, g: 0 },
+                vintage: { b: 90, c: 90, s: 80, bl: 0, v: 25, g: 10 },
+                film: { b: 100, c: 85, s: 110, bl: 0, v: 15, g: 15 },
+                punchy: { b: 110, c: 130, s: 140, bl: 0, v: 20, g: 0 },
+                glow: { b: 120, c: 110, s: 130, bl: 1, v: 10, g: 0 },
+                bw: { b: 100, c: 120, s: 0, bl: 0, v: 20, g: 5 },
+                sepia: { b: 95, c: 100, s: 50, bl: 0, v: 20, g: 0 },
+                dramatic: { b: 80, c: 150, s: 120, bl: 0, v: 40, g: 0 },
+                moody: { b: 75, c: 120, s: 80, bl: 1, v: 50, g: 10 }
+            };
+
+            const f = filters[preset];
+            document.getElementById('f-brightness').value = f.b;
+            document.getElementById('f-contrast').value = f.c;
+            document.getElementById('f-saturate').value = f.s;
+            document.getElementById('f-blur').value = f.bl;
+            document.getElementById('f-vignette').value = f.v;
+            document.getElementById('f-grain').value = f.g;
+            updateFilters();
+        }
+
+        function updateFilters() {
+            const b = document.getElementById('f-brightness').value;
+            const c = document.getElementById('f-contrast').value;
+            const s = document.getElementById('f-saturate').value;
+            const bl = document.getElementById('f-blur').value;
+            const v = document.getElementById('f-vignette').value;
+            const g = document.getElementById('f-grain').value;
+
+            bgPreview.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%) blur(${bl}px)`;
+            
+            // Updates labels
+            document.getElementById('val-brightness').innerText = b + '%';
+            document.getElementById('val-contrast').innerText = c + '%';
+            document.getElementById('val-saturate').innerText = s + '%';
+            document.getElementById('val-blur').innerText = bl + 'px';
+            document.getElementById('val-vignette').innerText = v + '%';
+            document.getElementById('val-grain').innerText = g + '%';
+        }
+
+        ['f-brightness', 'f-contrast', 'f-saturate', 'f-blur', 'f-vignette', 'f-grain'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateFilters);
+        });
+
+        function resetFilters() {
+            applyPreset('none');
+        }
+
+        // --- Export PNG ---
+        async function exportPNG() {
+            const canvas = document.getElementById('export-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // 1. Draw Background
+            ctx.filter = bgPreview.style.filter;
+            ctx.drawImage(bgPreview, 0, 0, 1280, 720);
+            ctx.filter = 'none';
+
+            // 2. Draw Layers
+            for (const layer of layers) {
+                ctx.save();
+                ctx.translate(layer.x + layer.size, layer.y + layer.size); // Rough offset for text
+                ctx.rotate(layer.rotation * Math.PI / 180);
+                
+                ctx.font = `900 ${layer.size}px ${layer.font}`;
+                ctx.textAlign = 'center';
+                
+                // Stroke
+                ctx.strokeStyle = layer.strokeColor;
+                ctx.lineWidth = layer.strokeWidth * 2;
+                ctx.lineJoin = 'round';
+                ctx.strokeText(layer.text, 0, 0);
+
+                // Fill
+                ctx.fillStyle = layer.color;
+                ctx.fillText(layer.text, 0, 0);
+
+                ctx.restore();
+            }
+
+            const link = document.createElement('a');
+            link.download = 'thumbnail-toolkit.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
